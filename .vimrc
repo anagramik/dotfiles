@@ -1,43 +1,26 @@
-" Put at the very end of your .vimrc file.
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
+" ================================================ "
+" Vundle
+" ================================================ "
 
-" updatetome = 750
-
-function PhpSyntaxOverride()
-    hi! def link phpDocTags  ihpDefine
-    hi! def link phpDocParam phpType
-endfunction
-
-augroup phpSyntaxOverride
-    autocmd!
-    autocmd FileType php call PhpSyntaxOverride()
-augroup END
-
-set nocompatible
-" scriptencoding utf-8  
-" Set scriptencoding to utf-8 (listchars)"
-
-" ================ Vundle  ====================
-
+set nocompatible                    "We want the latest Vim setting/options "
 filetype off
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+"
+Plugin 'VundleVim/Vundle.vim'
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" Gui plugins
+" Gui plugins "
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'kien/ctrlp.vim'
+Plugin 'tpope/vim-vinegar'
+Plugin 'vim-airline/vim-airline'
 
-" Search and movement
+" Search and movement "
 Plugin 'mileszs/ack.vim'
+Plugin 'skwp/greplace.vim'
 
-" Code edit
+" Code edit "
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'mattn/emmet-vim'
 Plugin 'mattn/webapi-vim'
@@ -45,82 +28,187 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
-Plugin 'junegunn/goyo.vim'
 
-" PHP 
- Plugin 'StanAngeloff/php.vim'
+" PHP "
+Plugin 'StanAngeloff/php.vim'
+Plugin 'arnaud-lb/vim-php-namespace'
+Plugin 'tobyS/vmustache'
+Plugin 'tobyS/pdv'
+Plugin 'stephpy/vim-php-cs-fixer'
 
-" Autocomplete and sinppets
+" Autocomplete and sinppets "
 Plugin 'Shougo/neocomplete'
 Plugin 'Shougo/neosnippet'
 Plugin 'Shougo/neosnippet-snippets'
+Plugin 'ervandew/supertab'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+"Plugin 'SirVer/ultisnips'
 
-" Git and command line
+" Git and command line "
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'thinca/vim-quickrun'
 
-" Syntax highlight
+" Syntax highlight "
 Plugin 'cakebaker/scss-syntax.vim'
 Plugin 'jelera/vim-javascript-syntax'
-" Plugin 'digitaltoad/vim-jade'
 
-" Color schemes
+" Color schemes "
 Plugin 'kristijanhusak/vim-hybrid-material'
-" Plugin 'whatyouhide/vim-gotham'
 
-" All of your Plugins must be added before the following line
+" All of your Plugins must be added before the following line "
 call vundle#end()            " required
-filetype plugin indent on    " required
+filetype plugin indent on
 
 
-" =============== Color Schemes ====================
+set shell=zsh
+
+
+
+
+" =============== Visual  ==================== "
+
 set t_Co=256
 set background=dark
-" highlight clear SignColumn
-colorscheme hybrid_reverse 
-" let g:hybrid_use_iTerm_colors = 1"
+colorscheme hybrid_reverse
+let g:hybrid_use_iTerm_colors = 1
 
-" ================ General Config ====================
+"set macligatures                           "We want pretty symbols, when available.
+set guioptions-=e                           "We don't want Gui tabs.
+set linespace=16                            "Macvim-specific line-height.
+set lines=999
 
-set mouse=a                     "Enable mouse
-set title                       "Change the terminal's title
-set number                      "Line numbers are good
-set backspace=indent,eol,start  "Allow backspace in insert mode
-set history=1000                "Store lots of :cmdline history
-set showcmd                     "Show incomplete cmds down the bottom
-set showmode                    "Show current mode down the bottom
-set gcr=a:blinkon0              "Disable cursor blink
-set visualbell                  "No sounds
-set autoread                    "Reload files changed outside vim
-set smartcase                   "Smart case search if there is uppercase
-set cursorline                  "Highlight current line
-set showmatch                   "Highlight matching bracket
-set ignorecase                  "No case sensitivity
-set hlsearch                    "Highlight search term
-set incsearch                   "Jump to found term while searching
-set showmatch                   "Highlight matching bracket
-set shortmess=atI               " Don’t show the intro message when starting Vim
-" set spell
+set guioptions-=l                                                       "Disable Gui scrollbars.
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+
+"We'll fake a custom left padding for each window.
+hi LineNr guibg=bg
+"set foldcolumn=2
+hi foldcolumn guibg=bg
+"
+""Get rid of ugly split borders.
+hi vertsplit guifg=bg guibg=bg
+"
+
+" ================ General Config ==================== "
+
+set mouse=a                         "Enable mouse
+set title                           "Change the terminal's title
+set number                          "Line numbers are good
+set backspace=indent,eol,start      "Allow backspace in insert mode
+set history=1000                    "Store lots of :cmdline history
+set showcmd                         "Show incomplete cmds down the bottom
+set gcr=a:blinkon0                  "Disable cursor blink
+set noerrorbells visualbell t_vb=   "No sounds
+set autoread                        "Reload files changed outside vim
+set smartcase                       "Smart case search if there is uppercase
+set cursorline                      "Highlight current line
+set showmatch                       "Highlight matching bracket
+set ignorecase                      "No case sensitivity
+set hlsearch                        "Highlight search term
+set incsearch                       "Jump to found term while searching
+set showmatch                       "Highlight matching bracket
+set nowrap                          "Don't wrap lines
+set linebreak                       "Wrap lines at convenient points
+"set shortmess=atI                   "Don’t show the intro message when starting Vim
+set clipboard+=unnamed              "Copy to system clibpoard"
+set go+=a                           "Visual selection automatically copied to the clipboard
+syntax on                           "Turn on syntax highlighting
+set laststatus=2                    "Show statusbar
+set fileencoding=utf-8              "Set utf-8 encoding on write
+set encoding=utf8                   "Set utf-8 encoding on read
+set hidden                          "Switch buffers when they are not saved"
+set splitbelow                      "Create file underneath current
+set splitright                      "Create file on the right side
+set showtabline=2                   "Always show tabs
+set autowrite                       "Automatically write the file when switching buffers
+set complete=.,w,b,u                 "Set our desired autocomplition matching
 
 
-" This makes vim act like all other editors, buffers can
-" exist in the background without being in a window.
-" http://items.sjbach.com/319/configuring-vim-right
-set hidden
 
-"turn on syntax highlighting
-syntax on
+
+
+
+" ================ Indentation ====================== "
+
+set autoindent                      "Indent at the same level of the previous line"
+set smartindent
+set smarttab
+set shiftwidth=4                    "Tab width in normal mode
+set softtabstop=4                   "Tab width in insert mode
+set tabstop=4
+set expandtab
+
+
+
+
+" ================================================ "
+" Key mappings (bindings)
+" ================================================ "
+
+" Map space key as leader
+let mapleader="\<Space>"
+
+" Make it easy to edit vimrc file
+nmap <Leader>ev :tabedit $MYVIMRC<cr>
+
+" Disable Ex mode
+noremap Q <NOP>
 
 " Overwrite ESC
 inoremap jk <ESC>
 
-" Change leader to a comma because the backslash is too far away
-" That means all \x commands turn into ,x
-" The mapleader has to be set before vundle starts loading all
-" the plugins.
-" let mapleader=","
-let mapleader="\<Space>"
+" Easier navigation between split windows
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+" Add empty line and stay in command mode
+nmap <Leader>j o<Esc>
+nmap <Leader>k O<Esc>
+
+" Fast save
+nnoremap <Leader>w :w<CR>
+
+" Fast quit
+nnoremap <Leader>q :q<CR>
+
+" Automatically source vimrc file on save
+augroup autosourcing
+
+    autocmd!
+    autocmd BufWritePost .vimrc source %
+    autocmd BufWritePost .vimrc :AirlineRefresh
+
+augroup END
+
+" php function
+function! IPhpInsertUse()
+    call PhpInsertUse()
+    call feedkeys('a',  'n')
+endfunction
+autocmd FileType php inoremap <Leader>n <Esc>:call IPhpInsertUse()<CR>
+autocmd FileType php noremap <Leader>n :call PhpInsertUse()<CR>
+
+" Copy visual selection to clipboard
+vmap <C-x> :!pbcopy<CR>
+vmap <C-c> :w !pbcopy<CR><CR
+
+
+" Laravel specific
+nmap <Leader>lr :e app/Http/routes.php<cr>
+nmap <Leader>lm :!php artisan make:
+nmap <Leader><Leader>c :e app/Http/Controllers<cr>
+nmap <Leader><Leader>m :e app/<cr>
+nmap <Leader><Leader>v :e resources/views<cr>
+
+
+" Sort PHP use statements
+vmap <Leader>su ! awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-"}'<cr>
 
 
 " ================ Turn Off Swap Files ==============
@@ -128,6 +216,9 @@ let mapleader="\<Space>"
 set noswapfile
 set nobackup
 set nowb
+
+
+
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
@@ -138,31 +229,21 @@ if has('persistent_undo')
   set undofile
 endif
 
-" ================ Indentation ======================
-
-set autoindent
-set smartindent
-set smarttab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-set expandtab
-
-filetype plugin on
-filetype indent on
 
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
 
-set autoindent                  " Indent at the same level of the previous line"
-set nowrap                      " Don't wrap lines
-set linebreak                   " Wrap lines at convenient points
+
+
 
 " ================ Folds ============================
 
 set foldmethod=indent           " fold based on indent
 set foldnestmax=3               " deepest fold is 3 levels
 set nofoldenable                " don't fold by default
+
+
+
 
 " ================ Completion =======================
 
@@ -174,17 +255,23 @@ set wildignore+=*sass-cache*
 set wildignore+=*DS_Store*
 set wildignore+=vendor/rails/**
 set wildignore+=vendor/cache/**
+set wildignore+=*/vendor/**
+set wildignore+=*/node_modules/**
 set wildignore+=*.gem
 set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
-"
+
+
+
 " ================ Scrolling ========================
 
-set scrolloff=4                 " Start scrolling when we're 8 lines away from margins
+set scrolloff=4                 " Start scrolling when we're 4 lines away from margins
 set sidescrolloff=15
 set sidescroll=1
+
+
 
 " =============== Syntatic ==========================
 set statusline+=%#warningmsg#
@@ -196,42 +283,125 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+
 " ================ Custom Settings ========================
 
-" UltiSnips
+"/
+"/ Airline
+"/
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+"let g:airline_theme="molokai"
+let g:airline#extensions#tabline#enabled = 1        "enable the tabline
+let g:airline#extensions#tabline#fnamemod = ':t'    " show just the filename of buffers in the tab line
+let g:airline_detect_modified=1
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+"/
+"/ UltiSnips
+"/
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " If you want :UltiSnipsEdit to split your window.
-"let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsEditSplit="vertical"
 
+"/
+"/ PDV
+"/
+let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
+nnoremap <leader>d :call pdv#DocumentWithSnip()<CR>
 
-" Ack Search
+"/
+"/ vim-php-cs-fixer
+"/
+
+let g:php_cs_fixer_level = 'psr2'
+nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
+
+"/
+"/ Neonsnippet
+"/
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+            \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+
+" For conceal markers.
+if has('conceal')
+      set conceallevel=2 concealcursor=niv
+endif
+
+"/
+"/ Ack Search
+"/
 let g:ackhighlight = 1
 nnoremap <Leader>f :Ack
 
-" Emmet
-let g:user_emmet_expandabbr_key = '<C-e>'          "Change trigger emmet key
-let g:user_emmet_next_key = '<C-s>'                "Change trigger jump to next for emmet
+"/
+"/ Greplace
+"/
+set grepprg=ack                                     "We want to use ack for the search
+let g:grep_cmd_opts = '--noheading'
+
+"/
+"/ Emmet
+"/
+let g:user_emmet_expandabbr_key = '<C-e>'           "Change trigger emmet key
+let g:user_emmet_next_key = '<C-s>'                 "Change trigger jump to next for emmet
 " custom snippets
 " let g:user_emmet_settings = webapi#json#decode(join(readfile(expand('~/.snippets_custom.json')), "\n"))
 
-" GitGutter
+"/
+"/ GitGutter
+"/
 let g:gitgutter_realtime = 0                       "Disable gitgutter in realtime
 let g:gitgutter_eager = 0                          "Disable gitgutter to eager load on tab or buffer switch
 
-" NERDTree
+"/
+"/ NERDTree
+"/
 map <Leader>s :NERDTreeToggle<CR>
-let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$']
+let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
 let g:NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
+let NERDTreeHijackNetrw = 0
+
+"- close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-" Ctrp+P
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'c'
+"/
+"/ Ctrp+P
+"/
+let g:ctrlp_custom_ignore = 'node_modules/|DS_Store\|\.git'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+    \ }
+
+let g:ctrlp_match_window = 'top,order:ttb,min:1,max:30,results:30'
+
+nmap <C-p>  :CtrlP<cr>
+"nmap <C-r>  :CtrlPBufTag<cr>
+nmap <C-e>  :CtrlPMRUFiles<cr>
+
 
 " Multiple Select default mapping
 let g:multi_cursor_next_key='<C-n>'
@@ -241,58 +411,68 @@ let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
 
 " Called once right before you start selecting multiple cursors
-function! Multiple_cursors_before()
-  if exists(':NeoCompleteLock')==2
-    exe 'NeoCompleteLock'
-  endif
-endfunction
 
 " Called once only when the multiple selection is canceled (default <Esc>)
-function! Multiple_cursors_after()
-  if exists(':NeoCompleteUnlock')==2
-    exe 'NeoCompleteUnlock'
-  endif
-endfunction
+"function! Multiple_cursors_before()
+"  if exists(':NeoCompleteLock')==2
+"    exe 'NeoCompleteLock'
+"  endif
+"endfunction
 
-" easier navigation between split windows
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
+"function! Multiple_cursors_after()
+"  if exists(':NeoCompleteUnlock')==2
+"    exe 'NeoCompleteUnlock'
+"  endif
+"endfunction
 
-" Fugitive commands
+"/
+"/ Fugitive commands
+"/
 nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gd :Gdiff<CR>
 nnoremap <Leader>gb :Gblame<CR>
+nnoremap <Leader>gd :Gdiff<CR>
 nnoremap <Leader>gc :Gcommit<CR>
 
-" Moving lines up and down
-nnoremap ∆ :m .+1<CR>==
-nnoremap ˚ :m .-2<CR>==
+" Moving line/s up and down
+nmap ∆ :m .+1<CR>
+nmap ˚ :m .-2<CR>
 inoremap ∆ <Esc>:m .+1<CR>==gi
 inoremap ˚ <Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
-" lazy fingers
+" lazy fingers - save even if I typed uppercase W
 command! -bang W w<bang>
 
 " DOT command
-vnoremap . :norm.<CR>
-
-" window switching
-map <C-J> <C-W>
-map <C-K> <C-W>k
-map <C-l> <C-W>l
-map <C-h> <C-W>h
+"vnoremap . :norm.<CR>
 
 "so ~/.yadr/vim/settings.vim
 "Press ENTER or type command to continue turned off
 " set cmdheight=2
 " redraw
 
-" TODO: this may not be in the correct place. It is intended to allow overriding <Leader>.
-" source ~/.vimrc.before if it exists.
-if filereadable(expand("~/.vimrc.before"))
-  source ~/.vimrc.before
-endif
+" Put at the very end of your .vimrc file.
+function! PhpSyntaxOverride()
+  hi! def link phpDogcTags  phpDefine
+  hi! def link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+    autocmd!
+    autocmd FileType php call PhpSyntaxOverride()
+augroup END
+
+" Notes and Tips
+" - press 'zz' to instantly center the line where the cursor is located
+" 'za' open folded code
+" 'zc' fold code
+" - ctags <C-]> to go to function and <C-^> to go back
+" - <C-|> to enlarge the right window
+" merge bottom line with top line by typing capital 'J'
+
+" mark a plase with 'm + any key' and then to back to it type '+that key
+" lowercase keys will works for the current buffer only, capital letters will work across all buffers
+" `+ mark letter will take you back to the specific cursor position
+" - to check marks type :marks
+

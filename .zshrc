@@ -1,6 +1,14 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+export PATH="/usr/local/sbin:$PATH"
+PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.node/bin:$PATH"
+export PATH="$HOME/npm-global/bin:$PATH"
+export PATH="$PATH:$HOME/.composer/vendor/bin"
 #export PATH=/usr/local/share/npm/bin:$PATH
+
+#Autojump brew
+[[ -s $(brew --prefix)/etc/profile.d/autojump.sh  ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -52,7 +60,7 @@ plugins=(git)
 
 export PATH=$HOME/npm-global/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export MANPATH="/usr/local/man:$MANPATH"
+export PATH=~/.composer/vendor/bin:$PATH
 
 source $ZSH/oh-my-zsh.sh
 
@@ -78,16 +86,28 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+cdf() {
+    target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+    if [ "$target" != "" ]; then
+        cd "$target"; pwd
+    else
+        echo 'No Finder window found' >&2
+    fi
+}
 alias vvvup="cd ~/Work/VVV && vagrant up"
 alias vu="vagrant up"
 alias vh="vagrant halt"
 alias vm="vagrant ssh"
 alias vr="vagrant reload"
+alias vrp="vagrant reload --provision"
 alias vs="vagrant status"
+alias vgs="vagrant global-status"
 alias cask="brew cask"
 alias hosts="sudo vim /etc/hosts"
 alias mp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
 alias vremeje!="mplayer -playlist http://listen.radionomy.com/psytrance-power-radio.m3u -prefer-ipv4"
-eval $(thefuck --alias)
+alias ctagsl="ctags -R --PHP-kinds=+cf --exclude=node_modules --exclude=vendor --exclude=.git"
+#eval "$(docker-machine env default)"
+#alias vremeje!="mplayer -playlist ~/Documents/psytrance-power-radio.m3u -prefer-ipv4"
 #alias zshconfig="mate ~/.zshrc"
 #alias ohmyzsh="mate ~/.oh-my-zsh"
