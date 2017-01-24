@@ -1,13 +1,13 @@
 [core]
-    excludesfile = /Users/Sale/.gitignore_global
-    editor = /usr/local/bin/vim
+	excludesfile = /Users/Sale/.gitignore_global
+	editor = /usr/local/bin/vim
     #editor = /usr/bin/vim
 [difftool "sourcetree"]
-    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-    path =
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-    cmd = /opt/homebrew-cask/Caskroom/sourcetree/2.0.3/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
+	cmd = /opt/homebrew-cask/Caskroom/sourcetree/2.0.3/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [user]
     name = Aleksandar Radivojevic
     email = anagramik@gmail.com
@@ -37,6 +37,7 @@
     sa = stash apply
     st = status
     who = shortlog -s --
-    last = log -1 HEAD
+	last = log -1 HEAD
+	stash-unapply = !git stash show -p | git apply -R
 [push]
-    default = matching
+	default = matching
