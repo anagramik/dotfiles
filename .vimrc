@@ -6,8 +6,8 @@ set nocompatible                    "We want the latest Vim setting/options "
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-"
-Plugin 'VundleVim/Vundle.vim'
+
+
 
 " Gui plugins "
 Plugin 'scrooloose/nerdtree'
@@ -15,6 +15,7 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'kien/ctrlp.vim'
 Plugin 'tpope/vim-vinegar'
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 
 " Search and movement "
 Plugin 'mileszs/ack.vim'
@@ -25,7 +26,7 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'mattn/emmet-vim'
 Plugin 'mattn/webapi-vim'
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 
@@ -76,10 +77,10 @@ let g:hybrid_use_iTerm_colors = 1
 
 "set macligatures                           "We want pretty symbols, when available.
 set guioptions-=e                           "We don't want Gui tabs.
-set linespace=16                            "Macvim-specific line-height.
+set linespace=10                            "Macvim-specific line-height.
 set lines=999
 
-set guioptions-=l                                                       "Disable Gui scrollbars.
+set guioptions-=l                           "Disable Gui scrollbars.
 set guioptions-=L
 set guioptions-=r
 set guioptions-=R
@@ -91,7 +92,9 @@ hi foldcolumn guibg=bg
 "
 ""Get rid of ugly split borders.
 hi vertsplit guifg=bg guibg=bg
-"
+
+" airline
+let g:airline_theme='base16_monokai'
 
 " ================ General Config ==================== "
 
@@ -119,13 +122,13 @@ set go+=a                           "Visual selection automatically copied to th
 syntax on                           "Turn on syntax highlighting
 set laststatus=2                    "Show statusbar
 set fileencoding=utf-8              "Set utf-8 encoding on write
-set encoding=utf8                   "Set utf-8 encoding on read
+set encoding=utf-8                  "Set utf-8 encoding on read
 set hidden                          "Switch buffers when they are not saved"
 set splitbelow                      "Create file underneath current
 set splitright                      "Create file on the right side
 set showtabline=2                   "Always show tabs
 set autowrite                       "Automatically write the file when switching buffers
-set complete=.,w,b,u                 "Set our desired autocomplition matching
+set complete=.,w,b,u                "Set our desired autocomplition matching
 
 
 
@@ -153,13 +156,15 @@ set expandtab
 let mapleader="\<Space>"
 
 " Make it easy to edit vimrc file
-nmap <Leader>ev :tabedit $MYVIMRC<cr>
+"nnoremap <Leader>ev :tabedit $MYVIMRC<cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " Disable Ex mode
 noremap Q <NOP>
 
 " Overwrite ESC
 inoremap jk <ESC>
+" inoremap <esc> <nop>
 
 " Easier navigation between split windows
 nnoremap <c-j> <c-w>j
@@ -167,9 +172,16 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" delete line
+nnoremap <Leader>d dd
+
+" behave like other editors
+nnoremap <c-x> dd
+nnoremap <c-c> yy
+
 " Add empty line and stay in command mode
-nmap <Leader>j o<Esc>
-nmap <Leader>k O<Esc>
+nnoremap <Leader>j o<Esc>
+nnoremap <Leader>k O<Esc>
 
 " Fast save
 nnoremap <Leader>w :w<CR>
@@ -200,11 +212,12 @@ vmap <C-c> :w !pbcopy<CR><CR
 
 
 " Laravel specific
-nmap <Leader>lr :e app/Http/routes.php<cr>
-nmap <Leader>lm :!php artisan make:
-nmap <Leader><Leader>c :e app/Http/Controllers<cr>
-nmap <Leader><Leader>m :e app/<cr>
-nmap <Leader><Leader>v :e resources/views<cr>
+nnoremap <Leader>lr :e routes<cr>
+"nnoremap <Leader>lr :e app/Http/routes.php<cr>
+nnoremap <Leader>lm :!php artisan make:
+nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
+nnoremap <Leader><Leader>m :e app/<cr>
+nnoremap <Leader><Leader>v :e resources/views<cr>
 
 
 " Sort PHP use statements
@@ -224,9 +237,9 @@ set nowb
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
 if has('persistent_undo')
-  silent !mkdir ~/.vim/backups > /dev/null 2>&1
-  set undodir=~/.vim/backups
-  set undofile
+    silent !mkdir ~/.vim/backups > /dev/null 2>&1
+    set undodir=~/.vim/backups
+    set undofile
 endif
 
 
@@ -242,7 +255,8 @@ set foldmethod=indent           " fold based on indent
 set foldnestmax=3               " deepest fold is 3 levels
 set nofoldenable                " don't fold by default
 
-
+nnoremap <tab> >>
+nnoremap <s-tab> <<
 
 
 " ================ Completion =======================
@@ -278,10 +292,10 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 
 " ================ Custom Settings ========================
@@ -295,8 +309,8 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 "let g:airline_theme="molokai"
-let g:airline#extensions#tabline#enabled = 1        "enable the tabline
-let g:airline#extensions#tabline#fnamemod = ':t'    " show just the filename of buffers in the tab line
+let g:airline#extensions#tabline#enabled = 1 		"enable the tabline
+let g:airline#extensions#tabline#fnamemod = ':t' 	" show just the filename of buffers in the tab line
 let g:airline_detect_modified=1
 let g:airline#extensions#bufferline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
@@ -316,7 +330,7 @@ let g:UltiSnipsEditSplit="vertical"
 "/ PDV
 "/
 let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
-nnoremap <leader>d :call pdv#DocumentWithSnip()<CR>
+nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
 
 "/
 "/ vim-php-cs-fixer
@@ -340,13 +354,16 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
             \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-" Tell Neosnippet about the other snippets
-let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-
 " For conceal markers.
 if has('conceal')
-      set conceallevel=2 concealcursor=niv
+    set conceallevel=2 concealcursor=niv
 endif
+
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
+
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 "/
 "/ Ack Search
@@ -389,12 +406,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 "/
 "/ Ctrp+P
 "/
-let g:ctrlp_custom_ignore = 'node_modules/|DS_Store\|\.git'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-    \ }
+            \ 'dir':  '\v[\/]\(.git|.hg|.svn|node_modules|DS_Store)$',
+            \ 'file': '\v\.(exe|so|dll)$',
+            \ 'link': 'some_bad_symbolic_links',
+            \ }
 
 let g:ctrlp_match_window = 'top,order:ttb,min:1,max:30,results:30'
 
@@ -403,9 +419,14 @@ nmap <C-p>  :CtrlP<cr>
 nmap <C-e>  :CtrlPMRUFiles<cr>
 
 
+"/
+"/ Multiple Select 
+"/
+
 " Multiple Select default mapping
+
 let g:multi_cursor_next_key='<C-n>'
-let g:multi_cursor_start_word_key='g<C-n>'
+"let g:multi_cursor_start_word_key='g<C-n>'
 let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
@@ -454,8 +475,8 @@ command! -bang W w<bang>
 
 " Put at the very end of your .vimrc file.
 function! PhpSyntaxOverride()
-  hi! def link phpDogcTags  phpDefine
-  hi! def link phpDocParam phpType
+    hi! def link phpDogcTags  phpDefine
+    hi! def link phpDocParam phpType
 endfunction
 
 augroup phpSyntaxOverride
@@ -475,4 +496,3 @@ augroup END
 " lowercase keys will works for the current buffer only, capital letters will work across all buffers
 " `+ mark letter will take you back to the specific cursor position
 " - to check marks type :marks
-
