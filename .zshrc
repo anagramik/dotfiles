@@ -1,11 +1,5 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-export PATH="/usr/local/sbin:$PATH"
-PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.node/bin:$PATH"
-export PATH="$HOME/npm-global/bin:$PATH"
-export PATH="$PATH:$HOME/.composer/vendor/bin"
-#export PATH=/usr/local/share/npm/bin:$PATH
 
 #Autojump brew
 [[ -s $(brew --prefix)/etc/profile.d/autojump.sh  ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
@@ -57,10 +51,16 @@ ZSH_THEME="aleksandar"
 plugins=(git)
 
 # User configuration
+export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.node/bin:$PATH"
+#export PATH="$HOME/npm-global/bin:$PATH"
+#export PATH="$PATH:$HOME/.composer/vendor/bin"
+#export PATH=/usr/local/share/npm/bin:$PATH
 
 export PATH=$HOME/npm-global/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=~/.composer/vendor/bin:$PATH
+export PATH=~/.composer/vendor/bin:$PATH 
 
 source $ZSH/oh-my-zsh.sh
 
