@@ -62,7 +62,11 @@ export PATH=$HOME/npm-global/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=~/.composer/vendor/bin:$PATH 
 
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"
+
 source $ZSH/oh-my-zsh.sh
+
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -105,9 +109,7 @@ alias vgs="vagrant global-status"
 alias cask="brew cask"
 alias hosts="sudo vim /etc/hosts"
 alias mp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
-alias vremeje!="mplayer -playlist http://listen.radionomy.com/psytrance-power-radio.m3u -prefer-ipv4"
 alias ctagsl="ctags -R --PHP-kinds=+cf --exclude=node_modules --exclude=vendor --exclude=.git"
 #eval "$(docker-machine env default)"
-#alias vremeje!="mplayer -playlist ~/Documents/psytrance-power-radio.m3u -prefer-ipv4"
 #alias zshconfig="mate ~/.zshrc"
 #alias ohmyzsh="mate ~/.oh-my-zsh"

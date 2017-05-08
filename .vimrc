@@ -8,25 +8,28 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
 
 " Gui plugins "
 Plugin 'scrooloose/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-vinegar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'junegunn/vim-easy-align'
 
 " Search and movement "
 Plugin 'mileszs/ack.vim'
 Plugin 'skwp/greplace.vim'
+Plugin 'universal-ctags/ctags'
 
 " Code edit "
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'mattn/emmet-vim'
-Plugin 'mattn/webapi-vim'
 Plugin 'jiangmiao/auto-pairs'
-" Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 
@@ -38,14 +41,11 @@ Plugin 'tobyS/pdv'
 Plugin 'stephpy/vim-php-cs-fixer'
 
 " Autocomplete and sinppets "
-Plugin 'Shougo/neocomplete'
-Plugin 'Shougo/neosnippet'
-Plugin 'Shougo/neosnippet-snippets'
 Plugin 'ervandew/supertab'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
-"Plugin 'SirVer/ultisnips'
+Plugin 'SirVer/ultisnips'
 
 " Git and command line "
 Plugin 'tpope/vim-fugitive'
@@ -63,12 +63,12 @@ call vundle#end()            " required
 filetype plugin indent on
 
 
-set shell=zsh
 
 
 
-
-" =============== Visual  ==================== "
+" ================================================ "
+" Visual
+" ================================================ "
 
 set t_Co=256
 set background=dark
@@ -79,6 +79,7 @@ let g:hybrid_use_iTerm_colors = 1
 set guioptions-=e                           "We don't want Gui tabs.
 set linespace=10                            "Macvim-specific line-height.
 set lines=999
+set guifont=Knack\ Regular\ Nerd\ Font\ Complete\:h13
 
 set guioptions-=l                           "Disable Gui scrollbars.
 set guioptions-=L
@@ -89,14 +90,19 @@ set guioptions-=R
 hi LineNr guibg=bg
 "set foldcolumn=2
 hi foldcolumn guibg=bg
-"
 ""Get rid of ugly split borders.
 hi vertsplit guifg=bg guibg=bg
 
 " airline
 let g:airline_theme='base16_monokai'
 
-" ================ General Config ==================== "
+
+
+
+
+" ================================================ "
+" General Congif
+" ================================================ "
 
 set mouse=a                         "Enable mouse
 set title                           "Change the terminal's title
@@ -104,7 +110,6 @@ set number                          "Line numbers are good
 set backspace=indent,eol,start      "Allow backspace in insert mode
 set history=1000                    "Store lots of :cmdline history
 set showcmd                         "Show incomplete cmds down the bottom
-set gcr=a:blinkon0                  "Disable cursor blink
 set noerrorbells visualbell t_vb=   "No sounds
 set autoread                        "Reload files changed outside vim
 set smartcase                       "Smart case search if there is uppercase
@@ -121,21 +126,24 @@ set clipboard+=unnamed              "Copy to system clibpoard"
 set go+=a                           "Visual selection automatically copied to the clipboard
 syntax on                           "Turn on syntax highlighting
 set laststatus=2                    "Show statusbar
-set fileencoding=utf-8              "Set utf-8 encoding on write
-set encoding=utf-8                  "Set utf-8 encoding on read
+set fileencoding=utf8               "Set utf-8 encoding on write
+"set fileformats+=dos                "Disable new line at end of file
+set encoding=utf8                   "Set utf-8 encoding on read
 set hidden                          "Switch buffers when they are not saved"
 set splitbelow                      "Create file underneath current
 set splitright                      "Create file on the right side
 set showtabline=2                   "Always show tabs
 set autowrite                       "Automatically write the file when switching buffers
 set complete=.,w,b,u                "Set our desired autocomplition matching
+set shell=sh
 
 
 
 
 
-
-" ================ Indentation ====================== "
+" ================================================ "
+" Indentation
+" ================================================ "
 
 set autoindent                      "Indent at the same level of the previous line"
 set smartindent
@@ -144,6 +152,18 @@ set shiftwidth=4                    "Tab width in normal mode
 set softtabstop=4                   "Tab width in insert mode
 set tabstop=4
 set expandtab
+
+
+
+
+
+" ================================================
+" Swap files
+" ================================================
+set noswapfile
+set nobackup
+set nowb
+
 
 
 
@@ -179,6 +199,9 @@ nnoremap <Leader>d dd
 nnoremap <c-x> dd
 nnoremap <c-c> yy
 
+" Copy file path
+nnoremap <Leader>y :let @* = expand("%")<CR>
+
 " Add empty line and stay in command mode
 nnoremap <Leader>j o<Esc>
 nnoremap <Leader>k O<Esc>
@@ -189,6 +212,30 @@ nnoremap <Leader>w :w<CR>
 " Fast quit
 nnoremap <Leader>q :q<CR>
 
+" lazy fingers - save even if I typed uppercase W
+command! -bang W w<bang>
+
+" lazy fingers - quit even if I typed uppercase Q
+command! -bang Q q<bang>
+
+" nnoremap <Left> h
+" nnoremap <Right> l
+" nnoremap <Up> k
+" nnoremap <Down> j
+" inoremap <up> k
+" inoremap <down> j
+" inoremap <left> h
+" inoremap <right> l
+
+" Moving line/s up and down
+nmap ∆ :m .+1<CR>
+nmap ˚ :m .-2<CR>
+inoremap ∆ <Esc>:m .+1<CR>==gi
+inoremap ˚ <Esc>:m .-2<CR>==gi
+vnoremap ∆ :m '>+1<CR>gv=gv
+vnoremap ˚ :m '<-2<CR>gv=gv
+
+"
 " Automatically source vimrc file on save
 augroup autosourcing
 
@@ -212,28 +259,66 @@ vmap <C-c> :w !pbcopy<CR><CR
 
 
 " Laravel specific
-nnoremap <Leader>lr :e routes<cr>
+nnoremap <Leader><Leader>r :e routes<cr>
 "nnoremap <Leader>lr :e app/Http/routes.php<cr>
 nnoremap <Leader>lm :!php artisan make:
 nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
 nnoremap <Leader><Leader>m :e app/<cr>
+nnoremap <Leader><Leader>o :e app/Observers<cr>
+nnoremap <Leader><Leader>j :e app/Jobs<cr>
 nnoremap <Leader><Leader>v :e resources/views<cr>
-
+nnoremap <Leader><Leader>a :e resources/assets<cr>
 
 " Sort PHP use statements
 vmap <Leader>su ! awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-"}'<cr>
 
 
-" ================ Turn Off Swap Files ==============
-
-set noswapfile
-set nobackup
-set nowb
 
 
 
+" ================================================
+" Functions
+" ================================================
+function! FixFile()
+    let l = line(".")
+    let c = col(".")
+    " Delete trailing slashes
+    %s/\s\+$//e
+    " Replace tabs with spaces
+    %s/\t/    /e
+    " Fix indentation
+    exec "normal! gg=G"
+    call cursor(l, c)
+endfunction
 
-" ================ Persistent Undo ==================
+function! SetFileType()
+    let name = input("Filetype: ")
+    if (name != "")
+        exec "set filetype=" . name
+    endif
+endfunction
+
+function! NERDTreeToggleInCurDir()
+    " If NERDTree is open in the current buffer
+    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        exe ":NERDTreeClose"
+    else
+        if (expand("%:t") != '')
+            exe ":NERDTreeFind"
+        else
+            exe ":NERDTreeToggle"
+        endif
+    endif
+endfunction
+
+
+
+
+
+" ================================================
+" Persistent Undo
+" ================================================
+
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
 if has('persistent_undo')
@@ -242,14 +327,15 @@ if has('persistent_undo')
     set undofile
 endif
 
-
 " Display tabs and trailing spaces visually
 set list listchars=tab:\ \ ,trail:·
 
 
 
 
-" ================ Folds ============================
+" ================================================
+" Folds
+" ================================================
 
 set foldmethod=indent           " fold based on indent
 set foldnestmax=3               " deepest fold is 3 levels
@@ -259,7 +345,9 @@ nnoremap <tab> >>
 nnoremap <s-tab> <<
 
 
-" ================ Completion =======================
+" ================================================
+" Completion
+" ================================================
 
 set wildmode=list:longest
 set wildmenu                    " enable ctrl-n and ctrl-p to scroll thru matches
@@ -279,7 +367,10 @@ set wildignore+=*.png,*.jpg,*.gif
 
 
 
-" ================ Scrolling ========================
+
+" ================================================
+" Scrolling
+" ================================================
 
 set scrolloff=4                 " Start scrolling when we're 4 lines away from margins
 set sidescrolloff=15
@@ -287,18 +378,11 @@ set sidescroll=1
 
 
 
-" =============== Syntatic ==========================
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
 
 
-" ================ Custom Settings ========================
+" ================================================
+" Plugins Settings
+" ================================================
 
 "/
 "/ Airline
@@ -340,32 +424,6 @@ let g:php_cs_fixer_level = 'psr2'
 nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
 
 "/
-"/ Neonsnippet
-"/
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
-" SuperTab like snippets behavior.
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-            \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-    set conceallevel=2 concealcursor=niv
-endif
-
-" Enable snipMate compatibility feature.
-let g:neosnippet#enable_snipmate_compatibility = 1
-
-" Tell Neosnippet about the other snippets
-let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
-
-"/
 "/ Ack Search
 "/
 let g:ackhighlight = 1
@@ -394,7 +452,7 @@ let g:gitgutter_eager = 0                          "Disable gitgutter to eager l
 "/
 "/ NERDTree
 "/
-map <Leader>s :NERDTreeToggle<CR>
+nnoremap <Leader>s :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
 let g:NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
@@ -404,20 +462,29 @@ let NERDTreeHijackNetrw = 0
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 "/
+"/ VIM EASY ALIGN
+"/
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+"/
 "/ Ctrp+P
 "/
 let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/]\(.git|.hg|.svn|node_modules|DS_Store)$',
-            \ 'file': '\v\.(exe|so|dll)$',
-            \ 'link': 'some_bad_symbolic_links',
-            \ }
+  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules|DS_Store)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
 
 let g:ctrlp_match_window = 'top,order:ttb,min:1,max:30,results:30'
 
 nmap <C-p>  :CtrlP<cr>
 "nmap <C-r>  :CtrlPBufTag<cr>
 nmap <C-e>  :CtrlPMRUFiles<cr>
-
 
 "/
 "/ Multiple Select 
@@ -454,17 +521,6 @@ nnoremap <Leader>gb :Gblame<CR>
 nnoremap <Leader>gd :Gdiff<CR>
 nnoremap <Leader>gc :Gcommit<CR>
 
-" Moving line/s up and down
-nmap ∆ :m .+1<CR>
-nmap ˚ :m .-2<CR>
-inoremap ∆ <Esc>:m .+1<CR>==gi
-inoremap ˚ <Esc>:m .-2<CR>==gi
-vnoremap ∆ :m '>+1<CR>gv=gv
-vnoremap ˚ :m '<-2<CR>gv=gv
-
-" lazy fingers - save even if I typed uppercase W
-command! -bang W w<bang>
-
 " DOT command
 "vnoremap . :norm.<CR>
 
@@ -474,21 +530,23 @@ command! -bang W w<bang>
 " redraw
 
 " Put at the very end of your .vimrc file.
-function! PhpSyntaxOverride()
-    hi! def link phpDogcTags  phpDefine
-    hi! def link phpDocParam phpType
-endfunction
+"function! PhpSyntaxOverride()
+"    hi! def link phpDogcTags  phpDefine
+"    hi! def link phpDocParam phpType
+"endfunction
 
-augroup phpSyntaxOverride
-    autocmd!
-    autocmd FileType php call PhpSyntaxOverride()
-augroup END
+"augroup phpSyntaxOverride
+"    autocmd!
+"    autocmd FileType php call PhpSyntaxOverride()
+"augroup END
 
 " Notes and Tips
 " - press 'zz' to instantly center the line where the cursor is located
 " 'za' open folded code
 " 'zc' fold code
 " - ctags <C-]> to go to function and <C-^> to go back
+" - <C-w> + > to enlarge
+" - <C-w> + < to shrink
 " - <C-|> to enlarge the right window
 " merge bottom line with top line by typing capital 'J'
 
@@ -496,3 +554,13 @@ augroup END
 " lowercase keys will works for the current buffer only, capital letters will work across all buffers
 " `+ mark letter will take you back to the specific cursor position
 " - to check marks type :marks
+
+":e filename - Edit a file in a new buffer
+":bnext (or :bn) - go to next buffer
+":bprev (of :bp) - go to previous buffer
+":bd - delete a buffer (close a file)
+":sp filename - Open a file in a new buffer and split window
+"ctrl+ws - Split windows
+"ctrl+ww - switch between windows
+"ctrl+wq - Quit a window
+"ctrl+wv - Split windows vertically
