@@ -1,8 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
-#Autojump brew
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh  ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -53,17 +51,15 @@ plugins=(git)
 # User configuration
 export PATH="/usr/local/sbin:$PATH"
 export PATH="/usr/local/bin:$PATH"
-export PATH="$HOME/.node/bin:$PATH"
 #export PATH="$HOME/npm-global/bin:$PATH"
 #export PATH="$PATH:$HOME/.composer/vendor/bin"
 #export PATH=/usr/local/share/npm/bin:$PATH
 
+export NVM_DIR="/home/sale/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 export PATH=$HOME/npm-global/bin:$PATH
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=~/.composer/vendor/bin:$PATH 
-
-export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -106,10 +102,14 @@ alias vr="vagrant reload"
 alias vrp="vagrant reload --provision"
 alias vs="vagrant status"
 alias vgs="vagrant global-status"
-alias cask="brew cask"
 alias hosts="sudo vim /etc/hosts"
 alias mp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
 alias ctagsl="ctags -R --PHP-kinds=+cf --exclude=node_modules --exclude=vendor --exclude=.git"
+alias restartwifi="sudo systemctl restart network-manager.service"
 #eval "$(docker-machine env default)"
 #alias zshconfig="mate ~/.zshrc"
 #alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+#         source /etc/profile.d/vte.sh
+# fi
