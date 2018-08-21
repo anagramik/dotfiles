@@ -18,7 +18,6 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-vinegar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'ryanoasis/vim-devicons'
 Plugin 'junegunn/vim-easy-align'
 
 " Search and movement "
@@ -32,6 +31,7 @@ Plugin 'mattn/emmet-vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
+Plugin 'posva/vim-vue'
 
 " PHP "
 Plugin 'StanAngeloff/php.vim'
@@ -45,7 +45,7 @@ Plugin 'ervandew/supertab'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'garbas/vim-snipmate'
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 
 " Git and command line "
 Plugin 'tpope/vim-fugitive'
@@ -79,7 +79,7 @@ let g:hybrid_use_iTerm_colors = 1
 set guioptions-=e                           "We don't want Gui tabs.
 set linespace=10                            "Macvim-specific line-height.
 set lines=999
-set guifont=Knack\ Regular\ Nerd\ Font\ Complete\:h13
+set guifont=DroidSansMono\ Nerd\ Font\ 1
 
 set guioptions-=l                           "Disable Gui scrollbars.
 set guioptions-=L
@@ -92,9 +92,6 @@ hi LineNr guibg=bg
 hi foldcolumn guibg=bg
 ""Get rid of ugly split borders.
 hi vertsplit guifg=bg guibg=bg
-
-" airline
-let g:airline_theme='base16_monokai'
 
 
 
@@ -157,9 +154,9 @@ set expandtab
 
 
 
-" ================================================
-" Swap files
-" ================================================
+" ================================================ "
+" Swap files 
+" ================================================ "
 set noswapfile
 set nobackup
 set nowb
@@ -276,9 +273,9 @@ vmap <Leader>su ! awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-"}'<cr>
 
 
 
-" ================================================
+" ================================================ "
 " Functions
-" ================================================
+" ================================================ "
 function! FixFile()
     let l = line(".")
     let c = col(".")
@@ -315,9 +312,9 @@ endfunction
 
 
 
-" ================================================
+" ================================================ "
 " Persistent Undo
-" ================================================
+" ================================================ "
 
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
@@ -333,9 +330,9 @@ set list listchars=tab:\ \ ,trail:·
 
 
 
-" ================================================
+" ================================================ "
 " Folds
-" ================================================
+" ================================================ "
 
 set foldmethod=indent           " fold based on indent
 set foldnestmax=3               " deepest fold is 3 levels
@@ -345,9 +342,9 @@ nnoremap <tab> >>
 nnoremap <s-tab> <<
 
 
-" ================================================
+" ================================================ ""
 " Completion
-" ================================================
+" ================================================ "
 
 set wildmode=list:longest
 set wildmenu                    " enable ctrl-n and ctrl-p to scroll thru matches
@@ -368,9 +365,9 @@ set wildignore+=*.png,*.jpg,*.gif
 
 
 
-" ================================================
+" ================================================ "
 " Scrolling
-" ================================================
+" ================================================ "
 
 set scrolloff=4                 " Start scrolling when we're 4 lines away from margins
 set sidescrolloff=15
@@ -380,28 +377,26 @@ set sidescroll=1
 
 
 
-" ================================================
-" Plugins Settings
-" ================================================
+" ================================================ "
+" Airline
+" ================================================ "
 
-"/
-"/ Airline
-"/
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 let g:airline_symbols.space = "\ua0"
-"let g:airline_theme="molokai"
-let g:airline#extensions#tabline#enabled = 1 		"enable the tabline
-let g:airline#extensions#tabline#fnamemod = ':t' 	" show just the filename of buffers in the tab line
-let g:airline_detect_modified=1
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#enabled = 1
+"let g:airline_theme=""
 
-"/
-"/ UltiSnips
-"/
+
+
+
+
+" ================================================ "
+" UltiSnips
+" ================================================ "
+
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -410,60 +405,101 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
-"/
-"/ PDV
-"/
+
+
+
+
+
+" ================================================ "
+" PDV
+" ================================================ "
+
 let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
 nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
 
-"/
-"/ vim-php-cs-fixer
-"/
+
+
+
+
+" ================================================ "
+" vim-php-cs-fixer
+" ================================================ "
 
 let g:php_cs_fixer_level = 'psr2'
+let g:php_cs_fixer_php_path = "php"               " Path to PHP
+let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
+let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
+let g:php_cs_fixer_verbose = 0   
+
 nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
 
-"/
-"/ Ack Search
-"/
+
+
+
+
+" ================================================ "
+" Ack Search
+" ================================================ "
 let g:ackhighlight = 1
 nnoremap <Leader>f :Ack
 
-"/
-"/ Greplace
-"/
+
+
+
+
+
+" ================================================ "
+" Greplace
+" ================================================ "
 set grepprg=ack                                     "We want to use ack for the search
 let g:grep_cmd_opts = '--noheading'
 
-"/
-"/ Emmet
-"/
+
+
+
+
+
+" ================================================ "
+" Emmet
+" ================================================ "
 let g:user_emmet_expandabbr_key = '<C-e>'           "Change trigger emmet key
 let g:user_emmet_next_key = '<C-s>'                 "Change trigger jump to next for emmet
 " custom snippets
 " let g:user_emmet_settings = webapi#json#decode(join(readfile(expand('~/.snippets_custom.json')), "\n"))
 
-"/
-"/ GitGutter
-"/
+
+
+
+
+" ================================================ "
+" GitGutter
+" ================================================ "
 let g:gitgutter_realtime = 0                       "Disable gitgutter in realtime
 let g:gitgutter_eager = 0                          "Disable gitgutter to eager load on tab or buffer switch
 
-"/
-"/ NERDTree
-"/
+
+
+
+
+" ================================================ "
+" NERDTree
+" ================================================ "
 nnoremap <Leader>s :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
-let g:NERDTreeChDirMode=2
+" let g:NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeHijackNetrw = 0
 
 "- close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-"/
-"/ VIM EASY ALIGN
-"/
+
+
+
+
+" ================================================ "
+" VIM EASY ALIGN
+" ================================================ "
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -471,9 +507,13 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-"/
-"/ Ctrp+P
-"/
+
+
+
+
+" ================================================ "
+" Ctrp+P
+" ================================================ "
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules|DS_Store)$',
   \ 'file': '\v\.(exe|so|dll)$',
@@ -486,9 +526,13 @@ nmap <C-p>  :CtrlP<cr>
 "nmap <C-r>  :CtrlPBufTag<cr>
 nmap <C-e>  :CtrlPMRUFiles<cr>
 
-"/
-"/ Multiple Select 
-"/
+
+
+
+
+" ================================================ "
+" Multiple Select 
+" ================================================ "
 
 " Multiple Select default mapping
 
@@ -513,9 +557,13 @@ let g:multi_cursor_quit_key='<Esc>'
 "  endif
 "endfunction
 
-"/
-"/ Fugitive commands
-"/
+
+
+
+
+" ================================================ "
+" Fugitive commands
+" ================================================ "
 nnoremap <Leader>gs :Gstatus<CR>
 nnoremap <Leader>gb :Gblame<CR>
 nnoremap <Leader>gd :Gdiff<CR>
@@ -564,3 +612,227 @@ nnoremap <Leader>gc :Gcommit<CR>
 "ctrl+ww - switch between windows
 "ctrl+wq - Quit a window
 "ctrl+wv - Split windows vertically
+
+
+
+" ================================================ "
+" Cursor movement
+" ================================================ "
+
+" h        # move cursor left
+" j        # move cursor down
+" k        # move cursor up
+" l        # move cursor right
+" H        # move to top of screen
+" M        # move to middle of screen
+" L        # move to bottom of screen
+" w        # jump forwards to the start of a word
+" W        # jump forwards to the start of a word (words can contain punctuation)
+" e        # jump forwards to the end of a word
+" E        # jump forwards to the end of a word (words can contain punctuation)
+" b        # jump backwards to the start of a word
+" B        # jump backwards to the start of a word (words can contain punctuation)
+" 0        # jump to the start of the line
+" ^        # jump to the first non-blank character of the line
+" $        # jump to the end of the line
+" g_       # jump to the last non-blank character of the line
+" gg       # go to the first line of the document
+" G        # go to the last line of the document
+" 5G       # go to line 5
+" fx       # jump to next occurrence of character x
+" tx       # jump to before next occurrence of character x
+" }        # jump to next paragraph (or function/block, when editing code)
+" {        # jump to previous paragraph (or function/block, when editing code)
+" zz       # center cursor on screen
+" Ctrl + b # move back one full screen
+" Ctrl + f # move forward one full screen
+" Ctrl + d # move forward 1/2 a screen
+" Ctrl + u # move back 1/2 a screen
+
+
+
+
+
+
+" ================================================ "
+" Insert mode - inserting/appending text
+" ================================================ "
+
+" i        # insert before the cursor
+" I        # insert at the beginning of the line
+" a        # insert (append) after the cursor
+" A        # insert (append) at the end of the line
+" o        # append (open) a new line below the current line
+" O        # append (open) a new line above the current line
+" ea       # insert (append) at the end of the word
+" Esc      # exit insert mod
+
+
+
+
+
+" ================================================ "
+" Editing
+" ================================================ "
+
+" r        # replace a single character
+" J        # join line below to the current one
+" cc       # change (replace) entire line
+" cw       # change (replace) to the start of the next word
+" ce       # change (replace) to the end of the next word
+" cb       # change (replace) to the start of the previous word
+" c$       # change (replace) to the end of the line
+" s        # delete character and substitute text
+" S        # delete line and substitute text (same as cc)
+" xp       # transpose two letters (delete and paste)
+" .        # repeat last command
+" u        # undo
+" Ctrl + r # redo
+
+
+
+
+
+" ================================================ "
+" Marking text (visual mode)
+" ================================================ "
+
+" v        # start visual mode, mark lines, then do a command (like y-yank)
+" V        # start linewise visual mode
+" o        # move to other end of marked area
+" O        # move to other corner of block
+" aw       # mark a word
+" ab       # a block with ()
+" aB       # a block with {}
+" ib       # inner block with ()
+" iB       # inner block with {}
+" Esc      # exit visual mode
+" Ctrl + v # start visual block mode
+
+
+
+
+
+" ================================================ "
+"Visual commands
+" ================================================ "
+
+" >       # shift text right
+" <       # shift text left
+" y       # yank (copy) marked text
+" d       # delete marked text
+" ~       # switch case
+
+
+
+
+
+" ================================================ "
+" Cut and paste
+" ================================================ "
+
+" yy       # yank (copy) a line
+" 2yy      # yank (copy) 2 lines
+" yw       # yank (copy) the characters of the word from the cursor position to the start of the next word
+" y$       # yank (copy) to end of line
+" p        # put (paste) the clipboard after cursor
+" P        # put (paste) before cursor
+" dd       # delete (cut) a line
+" 2dd      # delete (cut) 2 lines
+" dw       # delete (cut) the characters of the word from the cursor position to the start of the next word
+" D        # delete (cut) to the end of the line
+" d$       # delete (cut) to the end of the line
+" d^       # delete (cut) to the first non-blank character of the line
+" d0       # delete (cut) to the begining of the line
+" x        # delete (cut) character
+
+
+
+
+
+" ================================================ "
+" Search and replace
+" ================================================ "
+
+" /pattern       # search for pattern
+" ?pattern       # search backward for pattern
+" \vpattern      # 'very magic' pattern: non-alphanumeric characters are interpreted as special regex symbols (no escaping needed)
+" n              # repeat search in same direction
+" N              # repeat search in opposite direction
+" :%s/old/new/g  # replace all old with new throughout file
+" :%s/old/new/gc # replace all old with new throughout file with confirmations
+" :noh           # remove highlighting of search matches
+
+
+
+
+
+" ================================================ "
+" Search in multiple files
+" ================================================ "
+
+" :vimgrep /pattern/ {file} # search for pattern in multiple files
+" :cn                       # jump to the next match
+" :cp                       # jump to the previous match
+" :copen                    # open a window containing the list of matches
+
+
+
+
+
+" ================================================ "
+" Exiting
+" ================================================ "
+
+" :w              # write (save) the file, but don't exit
+" :w !sudo tee %  # write out the current file using sudo
+" :wq or :x or ZZ # write (save) and quit
+" :q              # quit (fails if there are unsaved changes)
+" :q! or ZQ       # quit and throw away unsaved changes
+
+
+
+
+
+" ================================================ "
+" Working with multiple files
+" ================================================ "
+
+" :e file       # edit a file in a new buffer
+" :bnext or :bn # go to the next buffer
+" :bprev or :bp # go to the previous buffer
+" :bd           # delete a buffer (close a file)
+" :ls           # list all open buffers
+" :sp file      # open a file in a new buffer and split window
+" :vsp file     # open a file in a new buffer and vertically split window
+" Ctrl + ws     # split window
+" Ctrl + ww     # switch windows
+" Ctrl + wq     # quit a window
+" Ctrl + wv     # split window vertically
+" Ctrl + wh     # move cursor to the left window (vertical split)
+" Ctrl + wl     # move cursor to the right window (vertical split)
+" Ctrl + wj     # move cursor to the window below (horizontal split)
+" Ctrl + wk     # move cursor to the window above (horizontal split)
+
+
+
+
+
+" ================================================ "
+" Tabs
+" ================================================ "
+
+" :tabnew or :tabnew file # open a file in a new tab
+" Ctrl + wT               # move the current split window into its own tab
+" gt or :tabnext or :tabn # move to the next tab
+" gT or :tabprev or :tabp # move to the previous tab
+" <number>gt              # move to tab <number>
+" :tabmove <number>       # move current tab to the <number>th position (indexed from 0)
+" :tabclose or :tabc      # close the current tab and all its windows
+" :tabonly or :tabo       # close all tabs except for the current one
+" :tabdo command          # run the command on all tabs (e.g. :tabdo q - closes all opened tabs
+
+
+
+
+
