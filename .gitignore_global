@@ -40,4 +40,7 @@ Thumbs.db
 # Custom #
 ######################
 tags
-/Users/sale/Work/yamba-web/config/database.php
+dump/
+yamba/
+.phpstorm*
+.idea

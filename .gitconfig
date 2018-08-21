@@ -1,7 +1,6 @@
 [core]
-	excludesfile = /Users/Sale/.gitignore_global
-	editor = /usr/local/bin/vim
-    #editor = /usr/bin/vim
+	excludesfile = /home/sale/.gitignore_global
+    editor = /usr/bin/vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
@@ -18,7 +17,7 @@
     ci = commit
     ca = commit --amend
     co = checkout
-    dsf = "!f() { [ \"$GIT_PREFIX\" != \"\"  ] && cd "$GIT_PREFIX"; git diff --color $@ | diff-so-fancy | less --tabs=4 -RFX;  }; f"
+	dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy  | less --tabs=4 -RFX; }; f"
     df = diff
     dfc = diff --cached
     lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
@@ -38,6 +37,7 @@
     s = stash
     sa = stash apply
     st = status
+    thereisnoescape = for-each-ref --format='%(authorname) %09 -%(refname:short) %09 -%(authordate)' --sort='-*authordate'
     who = shortlog -s --
 	last = log -1 HEAD
 [push]
