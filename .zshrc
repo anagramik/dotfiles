@@ -46,23 +46,28 @@ ZSH_THEME="aleksandar"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+    git
+)
 
 # User configuration
-export PATH="/usr/local/sbin:$PATH"
-export PATH="/usr/local/bin:$PATH"
-#export PATH="$HOME/npm-global/bin:$PATH"
-#export PATH="$PATH:$HOME/.composer/vendor/bin"
-#export PATH=/usr/local/share/npm/bin:$PATH
-
-export NVM_DIR="/home/sale/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+export PATH=/usr/local/sbin:$PATH
+export PATH=/usr/local/sbin:$PATH
+export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/npm-global/bin:$PATH
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export PATH=~/.composer/vendor/bin:$PATH 
+#export PATH=/bin:/usr/bin:/usr/local/bin:$PATH
+export PATH=$HOME/.composer/vendor/bin:$PATH
+export PATH=/usr/local/go/bin:$PATH
+export PATH=/home/sale/bin:$PATH
+#export PATH=/home/sale/.oh-my-zsh/custom/plugins/diff-so-fancy/diff-so-fancy:$PATH
+export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
 source $ZSH/oh-my-zsh.sh
 
+##export NVM_DIR="/home/sale/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+#export PATH="$PATH:$HOME/.composer/vendor/bin"
+#export PATH=/usr/local/share/npm/bin:$PATH
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -94,7 +99,7 @@ cdf() {
         echo 'No Finder window found' >&2
     fi
 }
-alias vvvup="cd ~/Work/VVV && vagrant up"
+
 alias vu="vagrant up"
 alias vh="vagrant halt"
 alias vm="vagrant ssh"
@@ -104,7 +109,7 @@ alias vs="vagrant status"
 alias vgs="vagrant global-status"
 alias hosts="sudo vim /etc/hosts"
 alias mp3="youtube-dl -x --audio-format mp3 --audio-quality 0"
-alias ctagsl="ctags -R --PHP-kinds=+cf --exclude=node_modules --exclude=vendor --exclude=.git"
+alias ctagsl="ctags -R --PHP-kinds=+cf --exclude=node_modules --exclude=vendor --exclude=public --exclude=.git"
 alias restartwifi="sudo systemctl restart network-manager.service"
 #eval "$(docker-machine env default)"
 #alias zshconfig="mate ~/.zshrc"
@@ -113,3 +118,21 @@ alias restartwifi="sudo systemctl restart network-manager.service"
 # if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
 #         source /etc/profile.d/vte.sh
 # fi
+## Highlight the current autocomplete option
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# Better SSH/Rsync/SCP Autocomplete
+zstyle ':completion:*:(scp|rsync):*' tag-order ' hosts:-ipaddr:ip\ address hosts:-host:host files'
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-host' ignored-patterns '*(.|:)*' loopback ip6-loopback localhost ip6-localhost broadcasthost local
+zstyle ':completion:*:(ssh|scp|rsync):*:hosts-ipaddr' ignored-patterns '^(<->.<->.<->.<->|(|::)([[:xdigit:].]##:(#c,2))##(|%*))' '127.0.0.<->' '255.255.255.255' '::1' 'fe80::*' '*.local'
+
+# Allow for autocomplete to be case insensitive
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' \
+  '+l:|?=** r:|?=**'
+
+# Initialize the autocompletion
+autoload -Uz compinit && compinit -i
+
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
