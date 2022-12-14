@@ -1,5 +1,6 @@
 if [[ -z $ZSH_THEME_ALEKSANDAR_PREFIX ]]; then
-   ZSH_THEME_ALEKSANDAR_PREFIX='❤ '
+   #ZSH_THEME_ALEKSANDAR_PREFIX='❤ '
+   ZSH_THEME_ALEKSANDAR_PREFIX='❲🍀💚🌏🌹❳ '
 fi
 
 
@@ -20,10 +21,10 @@ GIT_DIRTY_COLOR=$FG[133]
 GIT_CLEAN_COLOR=$FG[118]
 GIT_PROMPT_INFO=$FG[012]
 
-PROMPT='%{$FG[196]%}%n %{$FG[196]%}$ZSH_THEME_ALEKSANDAR_PREFIX %{$PROMPT_FOLDER_COLOR%}%~%{$reset_color%} %{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}%{$PROMPT_PROMPT%}ᐅ%{$reset_color%} '
+PROMPT='%{$FG[196]%}%n $ZSH_THEME_ALEKSANDAR_PREFIX %{$PROMPT_FOLDER_COLOR%}%~%{$reset_color%} %{$GIT_PROMPT_INFO%}$(git_prompt_info)%{$GIT_DIRTY_COLOR%}$(git_prompt_status) %{$reset_color%}%{$PROMPT_PROMPT%}
+ ᐅ %{$reset_color%}'
 
-
-#RPS1="${return_code}"
+RPS1="${return_code}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="("
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$GIT_PROMPT_INFO%})"
