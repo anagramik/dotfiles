@@ -13,12 +13,16 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Gui plugins "
 Plugin 'scrooloose/nerdtree'
+Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-vinegar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'junegunn/vim-easy-align'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'noahfrederick/vim-composer'
+Plugin 'noahfrederick/vim-laravel'
 
 " Search and movement "
 Plugin 'mileszs/ack.vim'
@@ -32,6 +36,7 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-commentary'
 Plugin 'posva/vim-vue'
+Plugin 'rafi/awesome-vim-colorschemes'
 
 " PHP "
 Plugin 'StanAngeloff/php.vim'
@@ -56,7 +61,7 @@ Plugin 'cakebaker/scss-syntax.vim'
 Plugin 'jelera/vim-javascript-syntax'
 
 " Color schemes "
-Plugin 'kristijanhusak/vim-hybrid-material'
+"Plugin 'kristijanhusak/vim-hybrid-material'
 
 " All of your Plugins must be added before the following line "
 call vundle#end()            " required
@@ -72,14 +77,14 @@ filetype plugin indent on
 
 set t_Co=256
 set background=dark
-colorscheme hybrid_reverse
+colorscheme hybrid
 let g:hybrid_use_iTerm_colors = 1
 
 "set macligatures                           "We want pretty symbols, when available.
 set guioptions-=e                           "We don't want Gui tabs.
 set linespace=10                            "Macvim-specific line-height.
 set lines=999
-set guifont=DroidSansMono\ Nerd\ Font\ 1
+"set guifont=DroidSansMono\ Nerd\ Font\ 1
 
 set guioptions-=l                           "Disable Gui scrollbars.
 set guioptions-=L
@@ -123,16 +128,16 @@ set clipboard+=unnamed              "Copy to system clibpoard"
 set go+=a                           "Visual selection automatically copied to the clipboard
 syntax on                           "Turn on syntax highlighting
 set laststatus=2                    "Show statusbar
-set fileencoding=utf8               "Set utf-8 encoding on write
+set fileencoding=UTF-8               "Set utf-8 encoding on write
 "set fileformats+=dos                "Disable new line at end of file
-set encoding=utf8                   "Set utf-8 encoding on read
+set encoding=UTF-8                   "Set utf-8 encoding on read
 set hidden                          "Switch buffers when they are not saved"
 set splitbelow                      "Create file underneath current
 set splitright                      "Create file on the right side
 set showtabline=2                   "Always show tabs
 set autowrite                       "Automatically write the file when switching buffers
 set complete=.,w,b,u                "Set our desired autocomplition matching
-set shell=sh
+set shell=/usr/bin/zsh
 
 
 
@@ -256,14 +261,13 @@ vmap <C-c> :w !pbcopy<CR><CR
 
 
 " Laravel specific
-nnoremap <Leader><Leader>r :e routes<cr>
 "nnoremap <Leader>lr :e app/Http/routes.php<cr>
-nnoremap <Leader>lm :!php artisan make:
-nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
+"nnoremap <Leader>lm :!php artisan make:
+nnoremap <Leader><Leader>r :e app/Http/Requests<cr>
 nnoremap <Leader><Leader>m :e app/<cr>
+nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
 nnoremap <Leader><Leader>o :e app/Observers<cr>
 nnoremap <Leader><Leader>j :e app/Jobs<cr>
-nnoremap <Leader><Leader>v :e resources/views<cr>
 nnoremap <Leader><Leader>a :e resources/assets<cr>
 
 " Sort PHP use statements
@@ -365,6 +369,7 @@ set wildignore+=*.png,*.jpg,*.gif
 
 
 
+
 " ================================================ "
 " Scrolling
 " ================================================ "
@@ -387,7 +392,8 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline_theme=""
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_theme="hybrid"
 
 
 
@@ -486,9 +492,17 @@ let g:gitgutter_eager = 0                          "Disable gitgutter to eager l
 " ================================================ "
 nnoremap <Leader>s :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
-" let g:NERDTreeChDirMode=2
+"let g:NERDTreeChDirMode=2
 let NERDTreeShowHidden=1
 let NERDTreeHijackNetrw = 0
+let g:NERDTreeWinPos = "right"
+
+
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeHighlightCursorline = 0
+let g:NERDTreeFileExtensionHighlightFullName = 0
+let g:NERDTreeExactMatchHighlightFullName = 0
+let g:NERDTreePatternMatchHighlightFullName =  0
 
 "- close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
@@ -526,6 +540,14 @@ nmap <C-p>  :CtrlP<cr>
 "nmap <C-r>  :CtrlPBufTag<cr>
 nmap <C-e>  :CtrlPMRUFiles<cr>
 
+
+
+
+
+" ================================================ "
+" Vim-Vue 
+" ================================================ "
+let g:vue_disable_pre_processors=1
 
 
 
