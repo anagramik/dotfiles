@@ -7,7 +7,6 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
@@ -129,7 +128,8 @@ set go+=a                           "Visual selection automatically copied to th
 syntax on                           "Turn on syntax highlighting
 set laststatus=2                    "Show statusbar
 set fileencoding=UTF-8               "Set utf-8 encoding on write
-"set fileformats+=dos                "Disable new line at end of file
+set fileformat=unix                 "End of line characters
+set fileformats+=dos                "Disable new line at end of file
 set encoding=UTF-8                   "Set utf-8 encoding on read
 set hidden                          "Switch buffers when they are not saved"
 set splitbelow                      "Create file underneath current
@@ -137,7 +137,7 @@ set splitright                      "Create file on the right side
 set showtabline=2                   "Always show tabs
 set autowrite                       "Automatically write the file when switching buffers
 set complete=.,w,b,u                "Set our desired autocomplition matching
-set shell=/usr/bin/zsh
+"set shell=/usr/bin/zsh
 
 
 
@@ -237,14 +237,13 @@ inoremap ˚ <Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
-"
+
 " Automatically source vimrc file on save
 augroup autosourcing
-
     autocmd!
     autocmd BufWritePost .vimrc source %
-    autocmd BufWritePost .vimrc :AirlineRefresh
-
+    " Comment out the airline refresh or make it conditional
+    " autocmd BufWritePost .vimrc :AirlineRefresh
 augroup END
 
 " php function
@@ -334,6 +333,7 @@ set list listchars=tab:\ \ ,trail:·
 
 
 
+
 " ================================================ "
 " Folds
 " ================================================ "
@@ -344,6 +344,9 @@ set nofoldenable                " don't fold by default
 
 nnoremap <tab> >>
 nnoremap <s-tab> <<
+
+
+
 
 
 " ================================================ ""
@@ -393,7 +396,7 @@ endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline_theme="hybrid"
+"let g:airline_theme="hybrid"
 
 
 
@@ -552,6 +555,7 @@ let g:vue_disable_pre_processors=1
 
 
 
+
 " ================================================ "
 " Multiple Select 
 " ================================================ "
@@ -637,6 +641,8 @@ nnoremap <Leader>gc :Gcommit<CR>
 
 
 
+
+
 " ================================================ "
 " Cursor movement
 " ================================================ "
@@ -670,7 +676,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " Ctrl + f # move forward one full screen
 " Ctrl + d # move forward 1/2 a screen
 " Ctrl + u # move back 1/2 a screen
-
 
 
 
