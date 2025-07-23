@@ -1,77 +1,80 @@
 " ================================================ "
-" Vundle
+" vim-plug Plugin Manager
 " ================================================ "
 
-set nocompatible                    "We want the latest Vim setting/options "
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set nocompatible                    " We want the latest Vim settings/options
+filetype off                        " Required for plugin loading
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Auto-install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" Gui plugins "
-Plugin 'scrooloose/nerdtree'
-Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'tpope/vim-vinegar'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'ryanoasis/vim-devicons'
-Plugin 'noahfrederick/vim-composer'
-Plugin 'noahfrederick/vim-laravel'
+" Plugin declarations
+call plug#begin('~/.vim/plugged')
 
-" Search and movement "
-Plugin 'mileszs/ack.vim'
-Plugin 'skwp/greplace.vim'
-Plugin 'universal-ctags/ctags'
+" File Management & Navigation
+Plug 'preservim/nerdtree'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tpope/vim-vinegar'
+Plug 'ryanoasis/vim-devicons'
 
-" Code edit "
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'mattn/emmet-vim'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-commentary'
-Plugin 'posva/vim-vue'
-Plugin 'rafi/awesome-vim-colorschemes'
+" Fuzzy Finding (FZF instead of CtrlP)
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
-" PHP "
-Plugin 'StanAngeloff/php.vim'
-Plugin 'arnaud-lb/vim-php-namespace'
-Plugin 'tobyS/vmustache'
-Plugin 'tobyS/pdv'
-Plugin 'stephpy/vim-php-cs-fixer'
+" Search and Replace
+Plug 'mileszs/ack.vim'
+Plug 'skwp/greplace.vim'
+Plug 'universal-ctags/ctags'
 
-" Autocomplete and sinppets "
-Plugin 'ervandew/supertab'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-"Plugin 'SirVer/ultisnips'
+" UI & Appearance
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'rafi/awesome-vim-colorschemes'
 
-" Git and command line "
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
+" Code Editing
+Plug 'mg979/vim-visual-multi'
+Plug 'mattn/emmet-vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'junegunn/vim-easy-align'
 
-" Syntax highlight "
-Plugin 'cakebaker/scss-syntax.vim'
-Plugin 'jelera/vim-javascript-syntax'
+" PHP Development
+Plug 'StanAngeloff/php.vim'
+Plug 'arnaud-lb/vim-php-namespace'
+Plug 'tobyS/vmustache'
+Plug 'tobyS/pdv'
+Plug 'stephpy/vim-php-cs-fixer'
+Plug 'noahfrederick/vim-composer'
+Plug 'noahfrederick/vim-laravel'
 
-" Color schemes "
-"Plugin 'kristijanhusak/vim-hybrid-material'
+" Autocompletion & Snippets
+Plug 'ervandew/supertab'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
 
-" All of your Plugins must be added before the following line "
-call vundle#end()            " required
+" Git Integration
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+" Language Support
+Plug 'posva/vim-vue'
+Plug 'cakebaker/scss-syntax.vim'
+Plug 'jelera/vim-javascript-syntax'
+
+call plug#end()
+
+" Enable filetype detection and plugins
 filetype plugin indent on
 
-
-
-
-
 " ================================================ "
-" Visual
+" Visual Configuration
 " ================================================ "
 
 set t_Co=256
@@ -79,157 +82,119 @@ set background=dark
 colorscheme hybrid
 let g:hybrid_use_iTerm_colors = 1
 
-"set macligatures                           "We want pretty symbols, when available.
-set guioptions-=e                           "We don't want Gui tabs.
-set linespace=10                            "Macvim-specific line-height.
-set lines=999
-"set guifont=DroidSansMono\ Nerd\ Font\ 1
+" GUI Options
+set guioptions-=e                   " No GUI tabs
+set linespace=10                    " Line height for GUI
+set lines=999                       " Maximize window height
 
-set guioptions-=l                           "Disable Gui scrollbars.
+" Remove scrollbars
+set guioptions-=l
 set guioptions-=L
 set guioptions-=r
 set guioptions-=R
 
-"We'll fake a custom left padding for each window.
+" Visual enhancements
 hi LineNr guibg=bg
-"set foldcolumn=2
 hi foldcolumn guibg=bg
-""Get rid of ugly split borders.
 hi vertsplit guifg=bg guibg=bg
 
-
-
-
-
 " ================================================ "
-" General Congif
+" General Configuration
 " ================================================ "
 
-set mouse=a                         "Enable mouse
-set title                           "Change the terminal's title
-set number                          "Line numbers are good
-set backspace=indent,eol,start      "Allow backspace in insert mode
-set history=1000                    "Store lots of :cmdline history
-set showcmd                         "Show incomplete cmds down the bottom
-set noerrorbells visualbell t_vb=   "No sounds
-set autoread                        "Reload files changed outside vim
-set smartcase                       "Smart case search if there is uppercase
-set cursorline                      "Highlight current line
-set showmatch                       "Highlight matching bracket
-set ignorecase                      "No case sensitivity
-set hlsearch                        "Highlight search term
-set incsearch                       "Jump to found term while searching
-set showmatch                       "Highlight matching bracket
-set nowrap                          "Don't wrap lines
-set linebreak                       "Wrap lines at convenient points
-"set shortmess=atI                   "Don’t show the intro message when starting Vim
-set clipboard+=unnamed              "Copy to system clibpoard"
-set go+=a                           "Visual selection automatically copied to the clipboard
-syntax on                           "Turn on syntax highlighting
-set laststatus=2                    "Show statusbar
-set fileencoding=UTF-8               "Set utf-8 encoding on write
-set fileformat=unix                 "End of line characters
-set fileformats+=dos                "Disable new line at end of file
-set encoding=UTF-8                   "Set utf-8 encoding on read
-set hidden                          "Switch buffers when they are not saved"
-set splitbelow                      "Create file underneath current
-set splitright                      "Create file on the right side
-set showtabline=2                   "Always show tabs
-set autowrite                       "Automatically write the file when switching buffers
-set complete=.,w,b,u                "Set our desired autocomplition matching
-"set shell=/usr/bin/zsh
-
-
-
-
+set mouse=a                         " Enable mouse support
+set title                           " Change terminal title
+set number                          " Show line numbers
+set backspace=indent,eol,start      " Allow backspace in insert mode
+set history=1000                    " Command history
+set showcmd                         " Show incomplete commands
+set noerrorbells visualbell t_vb=   " No sounds
+set autoread                        " Reload files changed outside vim
+set smartcase                       " Smart case search
+set cursorline                      " Highlight current line
+set showmatch                       " Highlight matching brackets
+set ignorecase                      " Case insensitive search
+set hlsearch                        " Highlight search terms
+set incsearch                       " Incremental search
+set nowrap                          " Don't wrap lines
+set linebreak                       " Wrap at word boundaries
+set clipboard+=unnamed              " System clipboard integration
+syntax on                           " Syntax highlighting
+set laststatus=2                    " Always show status line
+set fileencoding=UTF-8              " UTF-8 encoding
+set fileformat=unix                 " Unix line endings
+set encoding=UTF-8                  " UTF-8 encoding
+set hidden                          " Allow hidden buffers
+set splitbelow                      " Split below current window
+set splitright                      " Split right of current window
+set showtabline=2                   " Always show tab line
+set autowrite                       " Auto-write when switching buffers
+set complete=.,w,b,u                " Completion options
 
 " ================================================ "
 " Indentation
 " ================================================ "
 
-set autoindent                      "Indent at the same level of the previous line"
-set smartindent
-set smarttab
-set shiftwidth=4                    "Tab width in normal mode
-set softtabstop=4                   "Tab width in insert mode
-set tabstop=4
-set expandtab
-
-
-
-
+set autoindent                      " Auto-indent new lines
+set smartindent                     " Smart indentation
+set smarttab                        " Smart tab handling
+set shiftwidth=4                    " Indent width
+set softtabstop=4                   " Tab width in insert mode
+set tabstop=4                       " Tab display width
+set expandtab                       " Convert tabs to spaces
 
 " ================================================ "
-" Swap files 
-" ================================================ "
-set noswapfile
-set nobackup
-set nowb
-
-
-
-
-
-" ================================================ "
-" Key mappings (bindings)
+" Backup and Swap Files
 " ================================================ "
 
-" Map space key as leader
+set noswapfile                      " No swap files
+set nobackup                        " No backup files
+set nowb                            " No write backup
+
+" Persistent undo
+if has('persistent_undo')
+    silent !mkdir ~/.vim/backups > /dev/null 2>&1
+    set undodir=~/.vim/backups
+    set undofile
+endif
+
+" ================================================ "
+" Key Mappings
+" ================================================ "
+
+" Leader key
 let mapleader="\<Space>"
 
-" Make it easy to edit vimrc file
-"nnoremap <Leader>ev :tabedit $MYVIMRC<cr>
+" Edit vimrc
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " Disable Ex mode
 noremap Q <NOP>
 
-" Overwrite ESC
+" Alternative escape
 inoremap jk <ESC>
-" inoremap <esc> <nop>
 
-" Easier navigation between split windows
+" Window navigation
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-" delete line
+" Quick actions
 nnoremap <Leader>d dd
-
-" behave like other editors
 nnoremap <c-x> dd
 nnoremap <c-c> yy
-
-" Copy file path
 nnoremap <Leader>y :let @* = expand("%")<CR>
-
-" Add empty line and stay in command mode
 nnoremap <Leader>j o<Esc>
 nnoremap <Leader>k O<Esc>
-
-" Fast save
 nnoremap <Leader>w :w<CR>
-
-" Fast quit
 nnoremap <Leader>q :q<CR>
 
-" lazy fingers - save even if I typed uppercase W
+" Command shortcuts
 command! -bang W w<bang>
-
-" lazy fingers - quit even if I typed uppercase Q
 command! -bang Q q<bang>
 
-" nnoremap <Left> h
-" nnoremap <Right> l
-" nnoremap <Up> k
-" nnoremap <Down> j
-" inoremap <up> k
-" inoremap <down> j
-" inoremap <left> h
-" inoremap <right> l
-
-" Moving line/s up and down
+" Move lines up/down (Mac-specific Unicode characters)
 nmap ∆ :m .+1<CR>
 nmap ˚ :m .-2<CR>
 inoremap ∆ <Esc>:m .+1<CR>==gi
@@ -237,16 +202,64 @@ inoremap ˚ <Esc>:m .-2<CR>==gi
 vnoremap ∆ :m '>+1<CR>gv=gv
 vnoremap ˚ :m '<-2<CR>gv=gv
 
+" Copy visual selection to clipboard
+vmap <C-x> :!pbcopy<CR>
+vmap <C-c> :w !pbcopy<CR><CR>
 
-" Automatically source vimrc file on save
-augroup autosourcing
-    autocmd!
-    autocmd BufWritePost .vimrc source %
-    " Comment out the airline refresh or make it conditional
-    " autocmd BufWritePost .vimrc :AirlineRefresh
-augroup END
+" Sort PHP use statements
+vmap <Leader>su ! awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-"}'<cr>
 
-" php function
+" Indentation shortcuts
+nnoremap <tab> >>
+nnoremap <s-tab> <<
+
+" ================================================ "
+" FZF Configuration
+" ================================================ "
+
+" FZF key mappings
+nnoremap <C-p> :Files<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>rg :Rg<CR>
+nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>h :History<CR>
+
+" FZF layout
+let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_preview_window = 'right:60%'
+
+" ================================================ "
+" NERDTree Configuration
+" ================================================ "
+
+nnoremap <Leader>s :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
+let NERDTreeShowHidden=1
+let NERDTreeHijackNetrw = 0
+let g:NERDTreeWinPos = "right"
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeHighlightCursorline = 0
+
+" Close vim if only NERDTree is left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" ================================================ "
+" Airline Configuration
+" ================================================ "
+
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+" ================================================ "
+" PHP Configuration
+" ================================================ "
+
+" PHP namespace insertion
 function! IPhpInsertUse()
     call PhpInsertUse()
     call feedkeys('a',  'n')
@@ -254,14 +267,19 @@ endfunction
 autocmd FileType php inoremap <Leader>n <Esc>:call IPhpInsertUse()<CR>
 autocmd FileType php noremap <Leader>n :call PhpInsertUse()<CR>
 
-" Copy visual selection to clipboard
-vmap <C-x> :!pbcopy<CR>
-vmap <C-c> :w !pbcopy<CR><CR
+" PHP CS Fixer
+let g:php_cs_fixer_level = 'psr2'
+let g:php_cs_fixer_php_path = "php"
+let g:php_cs_fixer_enable_default_mapping = 1
+let g:php_cs_fixer_dry_run = 0
+let g:php_cs_fixer_verbose = 0
+nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
 
+" PDV (PHP Documentor)
+let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
+nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
 
-" Laravel specific
-"nnoremap <Leader>lr :e app/Http/routes.php<cr>
-"nnoremap <Leader>lm :!php artisan make:
+" Laravel shortcuts
 nnoremap <Leader><Leader>r :e app/Http/Requests<cr>
 nnoremap <Leader><Leader>m :e app/<cr>
 nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
@@ -269,93 +287,66 @@ nnoremap <Leader><Leader>o :e app/Observers<cr>
 nnoremap <Leader><Leader>j :e app/Jobs<cr>
 nnoremap <Leader><Leader>a :e resources/assets<cr>
 
-" Sort PHP use statements
-vmap <Leader>su ! awk '{ print length(), $0 \| "sort -n \| cut -d\\  -f2-"}'<cr>
-
-
-
-
-
 " ================================================ "
-" Functions
-" ================================================ "
-function! FixFile()
-    let l = line(".")
-    let c = col(".")
-    " Delete trailing slashes
-    %s/\s\+$//e
-    " Replace tabs with spaces
-    %s/\t/    /e
-    " Fix indentation
-    exec "normal! gg=G"
-    call cursor(l, c)
-endfunction
-
-function! SetFileType()
-    let name = input("Filetype: ")
-    if (name != "")
-        exec "set filetype=" . name
-    endif
-endfunction
-
-function! NERDTreeToggleInCurDir()
-    " If NERDTree is open in the current buffer
-    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
-        exe ":NERDTreeClose"
-    else
-        if (expand("%:t") != '')
-            exe ":NERDTreeFind"
-        else
-            exe ":NERDTreeToggle"
-        endif
-    endif
-endfunction
-
-
-
-
-
-" ================================================ "
-" Persistent Undo
+" Other Plugin Configurations
 " ================================================ "
 
-" Keep undo history across sessions, by storing in file.
-" Only works all the time.
-if has('persistent_undo')
-    silent !mkdir ~/.vim/backups > /dev/null 2>&1
-    set undodir=~/.vim/backups
-    set undofile
-endif
+" Ack search
+let g:ackhighlight = 1
+nnoremap <Leader>f :Ack
 
-" Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:·
+" Greplace
+set grepprg=ack
+let g:grep_cmd_opts = '--noheading'
 
+" Emmet
+let g:user_emmet_expandabbr_key = '<C-e>'
+let g:user_emmet_next_key = '<C-s>'
 
+" GitGutter
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
 
+" EasyAlign
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
 
+" Multiple cursors (vim-visual-multi - modern replacement)
+" Ctrl+N to start multicursor and select words
+" Tab/Shift+Tab to switch between Cursor and Extend mode
+" q to skip current match, Q to remove current cursor
+let g:VM_maps = {}
+let g:VM_maps['Find Under'] = '<C-n>'
+let g:VM_maps['Find Subword Under'] = '<C-n>'
+let g:VM_maps["Add Cursor Down"] = '<C-j>'
+let g:VM_maps["Add Cursor Up"] = '<C-k>'
+
+" Fugitive
+nnoremap <Leader>gs :Git status<CR>
+nnoremap <Leader>gb :Git blame<CR>
+nnoremap <Leader>gd :Git diff<CR>
+nnoremap <Leader>gc :Git commit<CR>
+
+" Vue
+let g:vue_disable_pre_processors=1
 
 " ================================================ "
-" Folds
+" Auto-commands
 " ================================================ "
 
-set foldmethod=indent           " fold based on indent
-set foldnestmax=3               " deepest fold is 3 levels
-set nofoldenable                " don't fold by default
+" Auto-source vimrc on save
+augroup autosourcing
+    autocmd!
+    autocmd BufWritePost .vimrc source %
+augroup END
 
-nnoremap <tab> >>
-nnoremap <s-tab> <<
-
-
-
-
-
-" ================================================ ""
-" Completion
+" ================================================ "
+" Completion and Wildmenu
 " ================================================ "
 
 set wildmode=list:longest
-set wildmenu                    " enable ctrl-n and ctrl-p to scroll thru matches
-set wildignore=*.o,*.obj,*~     " stuff to ignore when tab completing
+set wildmenu
+set wildignore=*.o,*.obj,*~
 set wildignore+=*vim/backups*
 set wildignore+=*sass-cache*
 set wildignore+=*DS_Store*
@@ -368,251 +359,32 @@ set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
 
+" ================================================ "
+" Folding
+" ================================================ "
 
-
-
-
+set foldmethod=indent
+set foldnestmax=3
+set nofoldenable
 
 " ================================================ "
 " Scrolling
 " ================================================ "
 
-set scrolloff=4                 " Start scrolling when we're 4 lines away from margins
+set scrolloff=4
 set sidescrolloff=15
 set sidescroll=1
 
-
-
-
-
 " ================================================ "
-" Airline
+" Visual Elements
 " ================================================ "
 
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-let g:airline_symbols.space = "\ua0"
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-"let g:airline_theme="hybrid"
-
-
-
-
+" Show tabs and trailing spaces (simplified to avoid encoding issues)
+set list listchars=tab:>-,trail:.
 
 " ================================================ "
-" UltiSnips
+" NOTES AND TIPS
 " ================================================ "
-
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-
-
-
-
-
-" ================================================ "
-" PDV
-" ================================================ "
-
-let g:pdv_template_dir = $HOME ."/.vim/bundle/pdv/templates_snip"
-nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
-
-
-
-
-
-" ================================================ "
-" vim-php-cs-fixer
-" ================================================ "
-
-let g:php_cs_fixer_level = 'psr2'
-let g:php_cs_fixer_php_path = "php"               " Path to PHP
-let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
-let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
-let g:php_cs_fixer_verbose = 0   
-
-nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
-
-
-
-
-
-" ================================================ "
-" Ack Search
-" ================================================ "
-let g:ackhighlight = 1
-nnoremap <Leader>f :Ack
-
-
-
-
-
-
-" ================================================ "
-" Greplace
-" ================================================ "
-set grepprg=ack                                     "We want to use ack for the search
-let g:grep_cmd_opts = '--noheading'
-
-
-
-
-
-
-" ================================================ "
-" Emmet
-" ================================================ "
-let g:user_emmet_expandabbr_key = '<C-e>'           "Change trigger emmet key
-let g:user_emmet_next_key = '<C-s>'                 "Change trigger jump to next for emmet
-" custom snippets
-" let g:user_emmet_settings = webapi#json#decode(join(readfile(expand('~/.snippets_custom.json')), "\n"))
-
-
-
-
-
-" ================================================ "
-" GitGutter
-" ================================================ "
-let g:gitgutter_realtime = 0                       "Disable gitgutter in realtime
-let g:gitgutter_eager = 0                          "Disable gitgutter to eager load on tab or buffer switch
-
-
-
-
-
-" ================================================ "
-" NERDTree
-" ================================================ "
-nnoremap <Leader>s :NERDTreeToggle<CR>
-let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
-"let g:NERDTreeChDirMode=2
-let NERDTreeShowHidden=1
-let NERDTreeHijackNetrw = 0
-let g:NERDTreeWinPos = "right"
-
-
-let g:NERDTreeLimitedSyntax = 1
-let g:NERDTreeHighlightCursorline = 0
-let g:NERDTreeFileExtensionHighlightFullName = 0
-let g:NERDTreeExactMatchHighlightFullName = 0
-let g:NERDTreePatternMatchHighlightFullName =  0
-
-"- close vim if the only window left open is a NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-
-
-
-
-" ================================================ "
-" VIM EASY ALIGN
-" ================================================ "
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-
-
-
-
-" ================================================ "
-" Ctrp+P
-" ================================================ "
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules|DS_Store)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-
-let g:ctrlp_match_window = 'top,order:ttb,min:1,max:30,results:30'
-
-nmap <C-p>  :CtrlP<cr>
-"nmap <C-r>  :CtrlPBufTag<cr>
-nmap <C-e>  :CtrlPMRUFiles<cr>
-
-
-
-
-
-" ================================================ "
-" Vim-Vue 
-" ================================================ "
-let g:vue_disable_pre_processors=1
-
-
-
-
-
-" ================================================ "
-" Multiple Select 
-" ================================================ "
-
-" Multiple Select default mapping
-
-let g:multi_cursor_next_key='<C-n>'
-"let g:multi_cursor_start_word_key='g<C-n>'
-let g:multi_cursor_prev_key='<C-p>'
-let g:multi_cursor_skip_key='<C-x>'
-let g:multi_cursor_quit_key='<Esc>'
-
-" Called once right before you start selecting multiple cursors
-
-" Called once only when the multiple selection is canceled (default <Esc>)
-"function! Multiple_cursors_before()
-"  if exists(':NeoCompleteLock')==2
-"    exe 'NeoCompleteLock'
-"  endif
-"endfunction
-
-"function! Multiple_cursors_after()
-"  if exists(':NeoCompleteUnlock')==2
-"    exe 'NeoCompleteUnlock'
-"  endif
-"endfunction
-
-
-
-
-
-" ================================================ "
-" Fugitive commands
-" ================================================ "
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <Leader>gb :Gblame<CR>
-nnoremap <Leader>gd :Gdiff<CR>
-nnoremap <Leader>gc :Gcommit<CR>
-
-" DOT command
-"vnoremap . :norm.<CR>
-
-"so ~/.yadr/vim/settings.vim
-"Press ENTER or type command to continue turned off
-" set cmdheight=2
-" redraw
-
-" Put at the very end of your .vimrc file.
-"function! PhpSyntaxOverride()
-"    hi! def link phpDogcTags  phpDefine
-"    hi! def link phpDocParam phpType
-"endfunction
-
-"augroup phpSyntaxOverride
-"    autocmd!
-"    autocmd FileType php call PhpSyntaxOverride()
-"augroup END
 
 " Notes and Tips
 " - press 'zz' to instantly center the line where the cursor is located
@@ -638,10 +410,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 "ctrl+ww - switch between windows
 "ctrl+wq - Quit a window
 "ctrl+wv - Split windows vertically
-
-
-
-
 
 " ================================================ "
 " Cursor movement
@@ -677,10 +445,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " Ctrl + d # move forward 1/2 a screen
 " Ctrl + u # move back 1/2 a screen
 
-
-
-
-
 " ================================================ "
 " Insert mode - inserting/appending text
 " ================================================ "
@@ -692,11 +456,7 @@ nnoremap <Leader>gc :Gcommit<CR>
 " o        # append (open) a new line below the current line
 " O        # append (open) a new line above the current line
 " ea       # insert (append) at the end of the word
-" Esc      # exit insert mod
-
-
-
-
+" Esc      # exit insert mode
 
 " ================================================ "
 " Editing
@@ -716,10 +476,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " u        # undo
 " Ctrl + r # redo
 
-
-
-
-
 " ================================================ "
 " Marking text (visual mode)
 " ================================================ "
@@ -736,12 +492,8 @@ nnoremap <Leader>gc :Gcommit<CR>
 " Esc      # exit visual mode
 " Ctrl + v # start visual block mode
 
-
-
-
-
 " ================================================ "
-"Visual commands
+" Visual commands
 " ================================================ "
 
 " >       # shift text right
@@ -749,10 +501,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " y       # yank (copy) marked text
 " d       # delete marked text
 " ~       # switch case
-
-
-
-
 
 " ================================================ "
 " Cut and paste
@@ -773,10 +521,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " d0       # delete (cut) to the begining of the line
 " x        # delete (cut) character
 
-
-
-
-
 " ================================================ "
 " Search and replace
 " ================================================ "
@@ -790,10 +534,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " :%s/old/new/gc # replace all old with new throughout file with confirmations
 " :noh           # remove highlighting of search matches
 
-
-
-
-
 " ================================================ "
 " Search in multiple files
 " ================================================ "
@@ -802,10 +542,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " :cn                       # jump to the next match
 " :cp                       # jump to the previous match
 " :copen                    # open a window containing the list of matches
-
-
-
-
 
 " ================================================ "
 " Exiting
@@ -816,10 +552,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " :wq or :x or ZZ # write (save) and quit
 " :q              # quit (fails if there are unsaved changes)
 " :q! or ZQ       # quit and throw away unsaved changes
-
-
-
-
 
 " ================================================ "
 " Working with multiple files
@@ -841,10 +573,6 @@ nnoremap <Leader>gc :Gcommit<CR>
 " Ctrl + wj     # move cursor to the window below (horizontal split)
 " Ctrl + wk     # move cursor to the window above (horizontal split)
 
-
-
-
-
 " ================================================ "
 " Tabs
 " ================================================ "
@@ -858,8 +586,3 @@ nnoremap <Leader>gc :Gcommit<CR>
 " :tabclose or :tabc      # close the current tab and all its windows
 " :tabonly or :tabo       # close all tabs except for the current one
 " :tabdo command          # run the command on all tabs (e.g. :tabdo q - closes all opened tabs
-
-
-
-
-
