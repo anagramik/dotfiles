@@ -41,3 +41,6 @@ end, 999) -- Higher priority
 
 -- Start the event tap
 keyRemapper:start()
+
+-- Load Preview Vim keybindings
+require('preview_vim')
