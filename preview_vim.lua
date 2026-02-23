@@ -14,146 +14,139 @@ local NORMALMODE = true
 
 local appsWatcher
 
+-- Store hotkey references for proper cleanup
+local hotkeys = {}
+
 local function enableAllKeys()
+    -- Clear any existing hotkeys first
+    for _, hk in ipairs(hotkeys) do
+        hk:delete()
+    end
+    hotkeys = {}
+
     --Enable Keybind: Scroll Left
-    hs.hotkey.bind({}, 'H',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'h',
     function()
         hs.eventtap.scrollWheel({SPEED, 0}, {})
     end,nil,
     function()
         hs.eventtap.scrollWheel({SPEED, 0}, {})
-    end)
+    end))
 
     --Enable Keybind: Scroll Down
-    hs.hotkey.bind({}, 'J',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'j',
     function()
         hs.eventtap.scrollWheel({0, -SPEED}, {})
     end,nil,
     function()
         hs.eventtap.scrollWheel({0, -SPEED}, {})
-    end)
+    end))
 
     --Enable Keybind: Scroll Up
-    hs.hotkey.bind({}, 'K',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'k',
     function()
         hs.eventtap.scrollWheel({0, SPEED}, {})
     end,nil,
     function()
         hs.eventtap.scrollWheel({0, SPEED}, {})
-    end)
+    end))
 
     --Enable Keybind: Scroll Right
-    hs.hotkey.bind({}, 'L',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'l',
     function()
         hs.eventtap.scrollWheel({-SPEED, 0}, {})
     end,nil,
     function()
         hs.eventtap.scrollWheel({-SPEED, 0}, {})
-    end)
+    end))
 
     --Enable Keybing: Bottom of PDF
-    hs.hotkey.bind({'shift'}, 'G',
+    table.insert(hotkeys, hs.hotkey.bind({'shift'}, 'g',
     function()
         hs.eventtap.keyStroke({'cmd'}, 'Down')
-    end)
+    end))
 
     --Enable Keybind: Move to Top of PDF
-    hs.hotkey.bind({}, 'G',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'g',
     function()
         hs.eventtap.keyStroke({'cmd'}, 'Up')
-    end)
+    end))
 
     --Enable Keybind: Scrool one page foward
-    hs.hotkey.bind({'ctrl'}, 'F',
+    table.insert(hotkeys, hs.hotkey.bind({'ctrl'}, 'f',
     function()
         hs.eventtap.keyStroke({}, 'Right')
     end,nil,
     function()
         hs.eventtap.keyStroke({}, 'Right')
-    end)
+    end))
 
     --Enable Keybind: Scrool one page backwards
-    hs.hotkey.bind({'ctrl'}, 'B',
+    table.insert(hotkeys, hs.hotkey.bind({'ctrl'}, 'b',
     function()
         hs.eventtap.keyStroke({}, 'Left')
     end,nil,
     function()
         hs.eventtap.keyStroke({}, 'Left')
-    end)
+    end))
 end
 
 local function disableScrollingKeys()
-    --Disable: Scroll Left Keybind
-    hs.hotkey.disableAll({}, 'H')
-
-    --Disable: Scroll Down Keybind
-    hs.hotkey.disableAll({}, 'J')
-
-    --Disable: Scroll Up Keybind
-    hs.hotkey.disableAll({}, 'K')
-
-    --Disable: Scroll Right Keybind
-    hs.hotkey.disableAll({}, 'L')
-
-    --Disable: Bottom of PDF Keybind
-    hs.hotkey.disableAll({'shift'}, 'G')
-
-    --Disable: Top of PDF Keybind
-    hs.hotkey.disableAll({}, 'G')
-
-    --Disable: Scrool one page foward keybind
-    hs.hotkey.disableAll({'ctrl'}, 'F')
-
-    --Disable: Scrool one page backward keybind
-    hs.hotkey.disableAll({'ctrl'}, 'B')
+    -- Properly delete all hotkeys
+    for _, hk in ipairs(hotkeys) do
+        if hk then
+            hk:delete()
+        end
+    end
+    hotkeys = {}
 end
 
 local function disableAllKeys()
     disableScrollingKeys()
-    hs.hotkey.disableAll({}, 'ESCAPE')
-    hs.hotkey.disableAll({}, 'I')
 end
 
 local function enableInsertKey()
     --Enable insert key when in Normal mode
-    hs.hotkey.bind({}, 'I',
+    table.insert(hotkeys, hs.hotkey.bind({}, 'i',
     function()
         if NORMALMODE then
             hs.alert.show('INSERT')
             INSERTMODE = true
             NORMALMODE = false
-            hs.hotkey.disableAll({}, 'I')
             disableScrollingKeys()
         end
-    end,nil, nil)
+    end,nil, nil))
 end
 
 local function previewWatcher(name, event, app)
     --If preview application is being focused watch for VIM keybinds
     if (name == READER and event == hs.application.watcher.activated) then
+        -- Start in NORMAL mode
+        NORMALMODE = true
+        INSERTMODE = false
+
         --Enable Keybind: Enter Normal Mode
-        hs.hotkey.bind({}, 'ESCAPE',
+        table.insert(hotkeys, hs.hotkey.bind({}, 'escape',
         function()
             if INSERTMODE then
                 hs.alert.show('NORMAL')
                 NORMALMODE = true
                 INSERTMODE = false
-                enableInsertKey()
+                disableScrollingKeys()
                 enableAllKeys()
             end
-        end,nil, nil)
+        end,nil, nil))
 
         --Enable Keybind: Enter Insert Mode
-        hs.hotkey.bind({}, 'I',
+        table.insert(hotkeys, hs.hotkey.bind({}, 'i',
         function()
             if NORMALMODE then
                 hs.alert.show('INSERT')
                 INSERTMODE = true
                 NORMALMODE = false
-                hs.hotkey.disableAll({}, 'I')
                 disableScrollingKeys()
             end
-        end,nil, nil)
+        end,nil, nil))
 
         enableAllKeys()
     end
