@@ -16,7 +16,7 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " File Management & Navigation
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-vinegar'
@@ -29,44 +29,61 @@ Plug 'junegunn/fzf.vim'
 " Search and Replace
 Plug 'mileszs/ack.vim'
 Plug 'skwp/greplace.vim'
-Plug 'universal-ctags/ctags'
+" Note: Install ctags via homebrew: brew install universal-ctags
 
 " UI & Appearance
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'rafi/awesome-vim-colorschemes'
+
+" Modern Color Schemes
+Plug 'projekt0n/github-nvim-theme'              " GitHub Dark/Light themes
+Plug 'folke/tokyonight.nvim'                    " Tokyo Night (JetBrains-like)
+Plug 'navarasu/onedark.nvim'                    " Atom's One Dark (JetBrains-like)
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }  " Catppuccin (modern & popular)
+Plug 'rafi/awesome-vim-colorschemes'            " Collection of themes (fallback)
 
 " Code Editing
 Plug 'mg979/vim-visual-multi'
-Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim', { 'for': ['html', 'css', 'vue', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact'] }
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/vim-easy-align'
 
-" PHP Development
-Plug 'StanAngeloff/php.vim'
-Plug 'arnaud-lb/vim-php-namespace'
-Plug 'tobyS/vmustache'
-Plug 'tobyS/pdv'
-Plug 'stephpy/vim-php-cs-fixer'
-Plug 'noahfrederick/vim-composer'
-Plug 'noahfrederick/vim-laravel'
+" PHP Development (uncomment if needed)
+" Plug 'StanAngeloff/php.vim', { 'for': 'php' }
+" Plug 'arnaud-lb/vim-php-namespace', { 'for': 'php' }
+" Plug 'tobyS/vmustache', { 'for': 'php' }
+" Plug 'tobyS/pdv', { 'for': 'php' }
+" Plug 'stephpy/vim-php-cs-fixer', { 'for': 'php' }
+" Plug 'noahfrederick/vim-composer', { 'for': 'php' }
+" Plug 'noahfrederick/vim-laravel', { 'for': 'php' }
 
-" Autocompletion & Snippets
-Plug 'ervandew/supertab'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
+" Autocompletion & LSP (coc.nvim replaces SuperTab and SnipMate)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Note: Run :CocInstall coc-tsserver coc-eslint coc-prettier coc-json coc-yaml coc-docker after install
 
 " Git Integration
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
-" Language Support
-Plug 'posva/vim-vue'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'jelera/vim-javascript-syntax'
+" Language Support - TypeScript & JavaScript
+Plug 'leafgarland/typescript-vim', { 'for': 'typescript' }
+Plug 'peitalin/vim-jsx-typescript', { 'for': ['typescript', 'typescriptreact'] }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'MaxMEllon/vim-jsx-pretty', { 'for': ['javascript', 'javascriptreact'] }
+
+" Docker & DevOps
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'hashivim/vim-terraform'
+
+" YAML & JSON
+Plug 'stephpy/vim-yaml'
+Plug 'elzr/vim-json', { 'for': 'json' }
+
+" Additional Language Support
+Plug 'leafOfTree/vim-vue-plugin', { 'for': 'vue' }
+Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 
 call plug#end()
 
@@ -79,8 +96,27 @@ filetype plugin indent on
 
 set t_Co=256
 set background=dark
-colorscheme hybrid
-let g:hybrid_use_iTerm_colors = 1
+set termguicolors                   " Enable true color support
+
+" Color Scheme Configuration
+" The Neovim themes (github-nvim-theme, tokyonight, onedark, catppuccin) require Lua
+" If using Vim (not Neovim), use gruvbox instead
+" If using Neovim, uncomment your preferred theme below
+
+" For Vim (no Lua support) - use gruvbox
+colorscheme gruvbox               " Gruvbox (classic, works in Vim)
+
+" For Neovim only (requires Lua) - uncomment one of these if using nvim:
+" colorscheme github_dark_default     " GitHub Dark
+" colorscheme tokyonight-night        " Tokyo Night (JetBrains-like)
+" colorscheme onedark                 " One Dark (JetBrains-like)
+" colorscheme catppuccin-mocha        " Catppuccin Mocha (modern)
+
+" GitHub theme specific settings (only for Neovim)
+" let g:github_theme_style = 'dark_default'
+
+" Airline theme (matches colorscheme)
+let g:airline_theme = 'gruvbox'
 
 " GUI Options
 set guioptions-=e                   " No GUI tabs
@@ -118,7 +154,7 @@ set hlsearch                        " Highlight search terms
 set incsearch                       " Incremental search
 set nowrap                          " Don't wrap lines
 set linebreak                       " Wrap at word boundaries
-set clipboard+=unnamed              " System clipboard integration
+set clipboard=unnamed,unnamedplus   " System clipboard integration (macOS)
 syntax on                           " Syntax highlighting
 set laststatus=2                    " Always show status line
 set fileencoding=UTF-8              " UTF-8 encoding
@@ -130,6 +166,10 @@ set splitright                      " Split right of current window
 set showtabline=2                   " Always show tab line
 set autowrite                       " Auto-write when switching buffers
 set complete=.,w,b,u                " Completion options
+set lazyredraw                      " Don't redraw during macros (performance)
+set regexpengine=1                  " Use old regex engine (sometimes faster)
+set updatetime=300                  " Faster completion and diagnostics
+set timeoutlen=500                  " Faster key sequence timeout
 
 " ================================================ "
 " Indentation
@@ -138,10 +178,14 @@ set complete=.,w,b,u                " Completion options
 set autoindent                      " Auto-indent new lines
 set smartindent                     " Smart indentation
 set smarttab                        " Smart tab handling
-set shiftwidth=4                    " Indent width
-set softtabstop=4                   " Tab width in insert mode
-set tabstop=4                       " Tab display width
+set shiftwidth=2                    " Indent width (2 spaces for JS/TS)
+set softtabstop=2                   " Tab width in insert mode
+set tabstop=2                       " Tab display width
 set expandtab                       " Convert tabs to spaces
+
+" File-specific indentation
+autocmd FileType python setlocal shiftwidth=4 softtabstop=4 tabstop=4
+autocmd FileType go setlocal shiftwidth=4 softtabstop=4 tabstop=4 noexpandtab
 
 " ================================================ "
 " Backup and Swap Files
@@ -222,6 +266,8 @@ nnoremap <C-p> :Files<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>rg :Rg<CR>
 nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>bt :BTags<CR>
+nnoremap <Leader>o :CocList outline<CR>
 nnoremap <Leader>h :History<CR>
 
 " FZF layout
@@ -233,7 +279,7 @@ let g:fzf_preview_window = 'right:60%'
 " ================================================ "
 
 nnoremap <Leader>s :NERDTreeToggle<CR>
-let NERDTreeIgnore=['\.git$', '\.sass-cache$', '_site$', 'node_modules$', 'cache$']
+let NERDTreeIgnore=['\.git$', 'node_modules$', 'dist$', 'build$', '\.next$', 'coverage$', '\.cache$']
 let NERDTreeShowHidden=1
 let NERDTreeHijackNetrw = 0
 let g:NERDTreeWinPos = "right"
@@ -241,7 +287,7 @@ let g:NERDTreeLimitedSyntax = 1
 let g:NERDTreeHighlightCursorline = 0
 
 " Close vim if only NERDTree is left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " ================================================ "
 " Airline Configuration
@@ -256,36 +302,123 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
 
 " ================================================ "
-" PHP Configuration
+" TypeScript/JavaScript Configuration
 " ================================================ "
 
-" PHP namespace insertion
-function! IPhpInsertUse()
-    call PhpInsertUse()
-    call feedkeys('a',  'n')
+" Set TypeScript filetype for .tsx files
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+
+" Auto-format on save with Prettier (via coc-prettier)
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+" ESLint auto-fix
+nnoremap <silent><leader>ef :CocCommand eslint.executeAutofix<CR>
+
+" NestJS shortcuts
+nnoremap <Leader><Leader>c :e src/controllers<cr>
+nnoremap <Leader><Leader>s :e src/services<cr>
+nnoremap <Leader><Leader>m :e src/modules<cr>
+nnoremap <Leader><Leader>e :e src/entities<cr>
+nnoremap <Leader><Leader>d :e src/dto<cr>
+
+" ================================================ "
+" PHP Configuration (commented out - uncomment if needed)
+" ================================================ "
+
+" " PHP namespace insertion
+" function! IPhpInsertUse()
+"     call PhpInsertUse()
+"     call feedkeys('a',  'n')
+" endfunction
+" autocmd FileType php inoremap <Leader>n <Esc>:call IPhpInsertUse()<CR>
+" autocmd FileType php noremap <Leader>n :call PhpInsertUse()<CR>
+
+" " PHP CS Fixer
+" let g:php_cs_fixer_level = 'psr12'
+" let g:php_cs_fixer_php_path = "php"
+" let g:php_cs_fixer_enable_default_mapping = 1
+" let g:php_cs_fixer_dry_run = 0
+" let g:php_cs_fixer_verbose = 0
+" nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
+
+" " PDV (PHP Documentor)
+" let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
+" nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
+
+" " Laravel shortcuts
+" nnoremap <Leader><Leader>r :e app/Http/Requests<cr>
+" nnoremap <Leader><Leader>m :e app/<cr>
+" nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
+" nnoremap <Leader><Leader>o :e app/Observers<cr>
+" nnoremap <Leader><Leader>j :e app/Jobs<cr>
+" nnoremap <Leader><Leader>a :e resources/assets<cr>
+
+" ================================================ "
+" Coc.nvim (LSP) Configuration
+" ================================================ "
+
+" Use tab for trigger completion with characters ahead and navigate
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-autocmd FileType php inoremap <Leader>n <Esc>:call IPhpInsertUse()<CR>
-autocmd FileType php noremap <Leader>n :call PhpInsertUse()<CR>
 
-" PHP CS Fixer
-let g:php_cs_fixer_level = 'psr2'
-let g:php_cs_fixer_php_path = "php"
-let g:php_cs_fixer_enable_default_mapping = 1
-let g:php_cs_fixer_dry_run = 0
-let g:php_cs_fixer_verbose = 0
-nnoremap <silent><leader>pf :call PhpCsFixerFixFile()<CR>
+" Use <c-space> to trigger completion
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
-" PDV (PHP Documentor)
-let g:pdv_template_dir = $HOME ."/.vim/plugged/pdv/templates_snip"
-nnoremap <leader>pdv :call pdv#DocumentWithSnip()<CR>
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-" Laravel shortcuts
-nnoremap <Leader><Leader>r :e app/Http/Requests<cr>
-nnoremap <Leader><Leader>m :e app/<cr>
-nnoremap <Leader><Leader>c :e app/Http/Controllers<cr>
-nnoremap <Leader><Leader>o :e app/Observers<cr>
-nnoremap <Leader><Leader>j :e app/Jobs<cr>
-nnoremap <Leader><Leader>a :e resources/assets<cr>
+" Use K to show documentation in preview window
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+" Apply codeAction to the selected region
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer
+nmap <leader>ac  <Plug>(coc-codeaction)
+
+" Apply AutoFix to problem on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Show all diagnostics
+nnoremap <silent><nowait> <space>cd  :<C-u>CocList diagnostics<cr>
 
 " ================================================ "
 " Other Plugin Configurations
@@ -302,10 +435,23 @@ let g:grep_cmd_opts = '--noheading'
 " Emmet
 let g:user_emmet_expandabbr_key = '<C-e>'
 let g:user_emmet_next_key = '<C-s>'
+let g:user_emmet_settings = {
+\  'typescript': {
+\    'extends': 'jsx',
+\  },
+\  'typescriptreact': {
+\    'extends': 'jsx',
+\  },
+\  'javascript': {
+\    'extends': 'jsx',
+\  },
+\  'javascriptreact': {
+\    'extends': 'jsx',
+\  },
+\}
 
 " GitGutter
-let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
+let g:gitgutter_async = 1
 
 " EasyAlign
 xmap ga <Plug>(EasyAlign)
@@ -330,6 +476,10 @@ nnoremap <Leader>gc :Git commit<CR>
 " Vue
 let g:vue_disable_pre_processors=1
 
+" Terraform
+let g:terraform_align=1
+let g:terraform_fmt_on_save=1
+
 " ================================================ "
 " Auto-commands
 " ================================================ "
@@ -350,14 +500,19 @@ set wildignore=*.o,*.obj,*~
 set wildignore+=*vim/backups*
 set wildignore+=*sass-cache*
 set wildignore+=*DS_Store*
-set wildignore+=vendor/rails/**
-set wildignore+=vendor/cache/**
-set wildignore+=*/vendor/**
 set wildignore+=*/node_modules/**
+set wildignore+=*/dist/**
+set wildignore+=*/build/**
+set wildignore+=*/.next/**
+set wildignore+=*/coverage/**
+set wildignore+=*.log
+set wildignore+=*/vendor/**
 set wildignore+=*.gem
 set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
+set wildignore+=package-lock.json
+set wildignore+=yarn.lock
 
 " ================================================ "
 " Folding
